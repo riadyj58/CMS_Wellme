@@ -1,0 +1,4 @@
+install node.js
+npm install --save ts-md5
+npm install ngx-webstorage --save  
+ng add angular-datatables

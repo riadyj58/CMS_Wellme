@@ -1,0 +1,54 @@
+{
+    "/loginrequest": {
+      "target": "http://localhost:8080/loginAdmin",
+      "secure": false,
+      "changeOrigin": false,
+      "pathRewrite": {
+        "^/loginrequest": ""
+      }
+    }
+    ,  "/checkSession": {
+      "target": "http://localhost:8080/checkSessionAdmin",
+      "secure": false,
+      "changeOrigin": false,
+      "pathRewrite": {
+        "^/checkSession": ""
+      }
+    }
+    ,  "/logout": {
+      "target": "http://localhost:8080/logoutAdmin",
+      "secure": false,
+      "changeOrigin": false,
+      "pathRewrite": {
+        "^/logout": ""
+      }
+    }
+    ,  "/promoAkumulasiAPI": {
+      "target": "http://10.8.0.2:8091/promo?filter=Objectives",
+      "secure": false,
+      "changeOrigin": false,
+      "pathRewrite": {
+        "^/promoAkumulasiAPI": ""
+      }
+    }
+    ,  "/addAkumulasi": {
+      "target": "http://10.8.0.2:8091/promo/akumulasi",
+      "secure": false,
+      "changeOrigin": false,
+      "pathRewrite": {
+        "^/addAkumulasi": ""
+      }
+    },  "/promo/akumulasi": {
+      "target": "http://10.8.0.2:8091/promo/akumulasi",
+      "secure": false,
+      "changeOrigin": false,
+      "pathRewrite": {
+        "^/promo/akumulasi": ""
+      }
+    }
+    ,  "/dashboard/overview/*": {
+      "target": "http://10.8.0.2:8091",
+      "secure": false,
+      "changeOrigin": false
+    }
+  }
