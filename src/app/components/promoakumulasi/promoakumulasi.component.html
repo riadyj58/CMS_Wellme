@@ -35,6 +35,19 @@
                         <span style="color: red;">{{addPromoMessage}}</span>
                         <tr><td><input type="submit" name="submit" class="btn btn-primary"></td></tr>
                     </form>
+
+                    <form [ngClass]="formUpdateClass" #updatePromoForm="ngForm" (ngSubmit)="updatePromoAkumulasi(addPromoForm)" novalidate class="form-horizontal" action="create_new_class.php" method="post" style="margin-bottom: 30px;">
+                        <input type="hidden" name="kode_promo" [(ngModel)]="kodePromo">
+                        Judul:<input type="text"  name="title" class="form-control" style="width: 50%" [(ngModel)]="title" required ><br>
+                        Subtitle :<input type="text"  name="subtitle" class="form-control" style="width: 50%"[(ngModel)]="subtitle" required ><br>
+                        Tanggal Mulai Promo: <input type="date" class="form-control" style="width: 50%" name="start_Date" [(ngModel)]="start_date" required><br>
+                        Tanggal Selsai Promo: <input type="date" class="form-control" style="width: 50%" name="end_Date" [(ngModel)]="end_date" required><br>
+                        Deskripsi: <textarea cols="10" rows="7" name="description" class="form-control" style="width: 50%; height: 50%;"  [(ngModel)]="description"></textarea><br>
+                        Cashback:<input type="number" name="cashback" class="form-control" style="width: 50%" required  [(ngModel)]="cashback"/><br>
+                        Target Akumulasi :<input type="number" name="target_akumulasi" style="width: 50%" class="form-control" required [(ngModel)]="target_akumulasi"/><br>
+                        <span style="color: red;">{{addPromoMessage}}</span>
+                        <tr><td><input type="submit" name="submit" class="btn btn-primary"></td></tr>
+                    </form>
                  
                     <div [ngClass]="alert" class="alert alert-dismissible show"  role="alert">
                          {{alertMessage}} Promo.
@@ -68,7 +81,9 @@
                               <td>{{promo.description}}</td>
                               <td>{{promo.cashback}}</td>
                               <td>{{promo.target_akumulasi}}</td>
-                              <td><button class="btn btn-primary" id="{{promo.kode_promo}}" >Edit </button></td>
+                              <td><div *ngIf="validateDate(promo)"><button class="btn btn-primary" id="{{promo.kode_promo}}" (click)="onSelect(promo)">Edit </button></div>
+                                <div *ngIf="!validateDate(promo)"><button class="btn btn-primary" disabled>Edit </button></div>
+                            </td>
                           </tr>
                         </tbody>
                        

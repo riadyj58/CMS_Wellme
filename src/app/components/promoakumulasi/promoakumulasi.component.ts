@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { stringify } from '@angular/compiler/src/util';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
@@ -16,13 +17,13 @@ import { PromoService } from 'src/app/services/promo.service';
   styleUrls: ['./promoakumulasi.component.css']
 })
 export class PromoakumulasiComponent implements OnInit {
-  @Input() title:string;
-  @Input() subtitle:string;
-  @Input() start_date:string;
-  @Input() end_date:string;
-  @Input() description:string;
-  @Input() cashback:number;
-  @Input() target_akumulasi:number;
+  @Input() title:string="";
+  @Input() subtitle:string="";
+  @Input() start_date:string="";
+  @Input() end_date:string="";
+  @Input() description:string="";
+  @Input() cashback:number=0;
+  @Input() target_akumulasi:number=0;
   isLogin="hidden";
   table:string='';
   addPromoMessage:string="";
@@ -40,7 +41,230 @@ export class PromoakumulasiComponent implements OnInit {
   alert:string="hidden";
   alertMessage:string="";
   alertClass:string="";
+  formUpdateClass:string="hidden";
   constructor(private fb: FormBuilder, private promoService:PromoService,private router:Router, private session:SessionStorageService, private sessionService:CheckSessionService) {
+  
+  }
+  
+  ngOnInit(): void {
+    this.checkSession();
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      processing: true,
+      
+    };
+    this.getPromoAkumulasi();
+    
+  }
+  
+  getPromoAkumulasi():void{
+    
+    this.promoService.getPromoAkumulasi().subscribe(response=>{
+      this.promo=response.output_schema;
+      console.log(this.promo);
+      
+      if (this.isDtInitialized) {
+        this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+          dtInstance.destroy();
+          this.dtTrigger.next();
+        });
+      } else {
+        this.isDtInitialized = true
+        this.dtTrigger.next();
+      }
+      
+      this.display="block";
+      this.loader="hidden";
+      
+    }, (err) => {
+      console.log('-----> err', err);
+    });
+  }
+  
+  checkSession():void{
+    this.sessionService.checkSession().subscribe(response=> {
+      
+      if(response.output_schema.session.message=="SUKSES"){
+        this.isLogin="block";
+        console.log("login hit");
+        this.session.store("username",response.output_schema.session.username);
+        this.session.store("token",response.output_schema.session.new_token);
+        
+        
+      }
+      else{
+        this.router.navigate(['/login'])
+      }
+    }, (error) => {
+      
+      
+    });
+  }
+  
+  toggleAdd():void{
+    this.formClass='block';
+    this.formUpdateClass="hidden";
+    this.resetForm();
+    window.scroll(0,0);
+  }
+  
+  addPromoAkumulasi(ngform:NgForm):void{
+    
+    
+    if (ngform.valid && (new Date(this.start_date)<new Date(this.end_date))){
+      this.display="hidden";
+      this.loader="flex";
+      this.formClass='hidden';
+      
+      this.promoService.addPromoAkumulasi(this.title,this.subtitle,this.start_date,this.end_date,this.description,this.cashback,this.target_akumulasi).subscribe(response=>{
+        console.log(response);
+        if(response.error_schema.error_code=="BIT-00-000")
+        {
+          this.alertMessage="Berhasil Menambahkan ";
+          this.alert="block alert-success";
+          
+          
+          this.getPromoAkumulasi();
+        }
+        else{
+          this.alertMessage="Gagal Menambahkan";
+          this.alert="block alert-danger";
+          this.getPromoAkumulasi();
+        }
+        this.resetForm();
+        
+      },(err) => {
+        this.resetForm();
+        this.alertMessage="Gagal Menambahkan";
+        this.alert="block alert-danger";
+        this.getPromoAkumulasi();
+        console.log('-----> err', err);
+      });
+      
+    }
+    else{
+      this.addPromoMessage=this.validationMessage();
+    }
+    
+    
+  }
+  
+  updatePromoAkumulasi(ngform:NgForm):void{
+    
+    
+    if (ngform.valid && (new Date(this.start_date)<new Date(this.end_date))){
+      this.display="hidden";
+      this.loader="flex";
+      this.formClass='hidden';
+      this.formUpdateClass="hidden";
+      var c=this.cashback;
+      var t=this.target_akumulasi;
+      this.promoService.updatePromoAkumulasi(this.kodePromo,this.title,this.subtitle,this.start_date,this.end_date,this.description,c,t).subscribe(response=>{
+        console.log(response);
+       
+        if(response.error_schema.error_code=="BIT-00-000")
+        {
+          this.alertMessage="Berhasil Mengupdate ";
+          this.alert="block alert-success";
+          
+          
+          this.getPromoAkumulasi();
+        }
+        else{
+          this.alertMessage="Gagal Mengupdate";
+          this.alert="block alert-danger";
+          this.getPromoAkumulasi();
+        }
+        this.resetForm();
+        
+      },(err) => {
+        this.resetForm();
+        this.alertMessage="Gagal Mengupdate";
+        this.alert="block alert-danger";
+        this.formClass="hidden";
+        this.formUpdateClass="hidden";
+        this.getPromoAkumulasi();
+        console.log('-----> err', err);
+      });
+      
+    }
+    else{
+      this.addPromoMessage=this.validationMessage();
+    }
+    
+    
+  }
+  
+  validationMessage():string
+  {
+    var temp="";
+    if (this.title=="")
+    {
+      temp+="Judul - ";
+    }
+    
+    if (this.subtitle=="")
+    {
+      temp+="Subtitle - ";
+    }
+    if (this.start_date=="")
+    {
+      temp+="Tanggal Mulai Promo - ";
+    }
+    if (this.end_date=="")
+    {
+      temp+="Tanggal Akhir Promo - ";
+    }
+    if (this.cashback==0)
+    {
+      temp+="Cashback - ";
+    }
+    
+    if (this.target_akumulasi==0)
+    {
+      temp+="Target Akumulasi - ";
+      
+    }
+    if(temp!="")
+    {
+      temp+="Tidak Boleh Kosong"
+    }
+    
+    if (new Date(this.start_date)>new Date(this.end_date))
+    {
+      temp+="- Tanggal Mulai Tidak Bisa Lebih Besar dari tanggal Selesai"; 
+    }
+    return temp
+  }
+
+  onSelect(selectedItem: any) {
+    console.log("Selected item : ", selectedItem);
+    var parts=selectedItem.start_date.split('-');
+    var parts2=selectedItem.end_date.split('-');
+    var sf = new Date(parts[2], parts[1] - 1, parts[0]); 
+    var ef= new Date(parts2[2], parts2[1] - 1, parts2[0]); 
+    console.log(sf,ef);
+    var start_date_formatted = new DatePipe('en-US').transform(sf, 'yyyy-MM-dd');
+    var end_date_formatted = new DatePipe('en-US').transform(ef, 'yyyy-MM-dd');
+
+    this.resetForm();
+    this.formUpdateClass="block";
+    this.formClass="hidden";
+    this.kodePromo=selectedItem.kode_promo;
+    this.title=selectedItem.title;
+    this.subtitle=selectedItem.subtitle;
+    this.start_date= start_date_formatted==null?"":start_date_formatted;
+    this.end_date=end_date_formatted==null?"":end_date_formatted;
+    this.description=selectedItem.description;
+    this.cashback=Number(selectedItem.cashback);
+    this.target_akumulasi=Number(selectedItem.target_akumulasi);
+    window.scroll(0,0);
+    
+  }
+  
+  resetForm():void
+  {
     this.title="";
     this.subtitle="";
     this.start_date="";
@@ -48,145 +272,18 @@ export class PromoakumulasiComponent implements OnInit {
     this.description="";
     this.cashback=0;
     this.target_akumulasi=0;
-  
-   }
+  }
 
-  ngOnInit(): void {
-    this.checkSession();
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-      processing: true,
-
-    };
-    this.getPromoAkumulasi();
-
-}
-
-getPromoAkumulasi():void{
-
-  this.promoService.getPromoAkumulasi().subscribe(response=>{
-    this.promo=response.output_schema;
-    console.log(this.promo);
-   
-    if (this.isDtInitialized) {
-      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-        dtInstance.destroy();
-        this.dtTrigger.next();
-      });
-    } else {
-      this.isDtInitialized = true
-      this.dtTrigger.next();
-    }
-
-    this.display="block";
-    this.loader="hidden";
-    
-  }, (err) => {
-    console.log('-----> err', err);
-  });
-}
-
-checkSession():void{
-  this.sessionService.checkSession().subscribe(response=> {
-      
-    if(response.output_schema.session.message=="SUKSES"){
-      this.isLogin="block";
-      console.log("login hit");
-      this.session.store("username",response.output_schema.session.username);
-      this.session.store("token",response.output_schema.session.new_token);
-      
-
+  validateDate(promo:any):boolean{
+    var parts=promo.start_date.split('-');
+    var sf = new Date(parts[2], parts[1] - 1, parts[0]); 
+    if(sf<new Date())
+    {
+      return false;
     }
     else{
-      this.router.navigate(['/login'])
+
+      return true;
     }
-  }, (error) => {
-
-    
-  });
-}
-
-toggleAdd():void{
-this.formClass='block';
-window.scroll(0,0);
-}
-
-addPromoAkumulasi(ngform:NgForm):void{
- if (ngform.valid){
-  this.display="hidden";
-  this.loader="flex";
-  this.formClass='hidden';
-   this.promoService.addPromoAkumulasi(this.title,this.subtitle,this.start_date,this.end_date,this.description,this.cashback,this.target_akumulasi).subscribe(response=>{
-  console.log(response);
-  if(response.error_schema.error_code=="BIT-00-000")
-  {
-    this.alertMessage="Berhasil Menambahkan ";
-    this.alert="block alert-success";
-    
-    
-    this.getPromoAkumulasi();
   }
-  else{
-    this.alertMessage="Gagal Mendambahkan";
-    this.alert="block alert-danger";
-    this.getPromoAkumulasi();
-  }
-  this.title="";
-  this.subtitle="";
-  this.start_date="";
-  this.end_date="";
-  this.description="";
-  this.cashback=0;
-  this.target_akumulasi=0;
-
- },(err) => {
-  this.title="";
-  this.subtitle="";
-  this.start_date="";
-  this.end_date="";
-  this.description="";
-  this.cashback=0;
-  this.target_akumulasi=0;
-  console.log('-----> err', err);
-});
-
- }
- else{
-this.addPromoMessage=this.validationMessage();
- }
-
-
-}
-validationMessage():string
-{
-  var temp="";
-  if (this.title=="")
-  {
-    temp+="Judul - ";
-  }
-  if (this.subtitle=="")
-  {
-    temp+="Subtitle - ";
-  }
-  if (this.start_date=="")
-  {
-    temp+="Tanggal Mulai Promo - ";
-  }
-  if (this.end_date=="")
-  {
-    temp+="Tanggal Akhir Promo - ";
-  }
-  if (this.cashback==0)
-  {
-    temp+="Cashback - ";
-  }
-  
-  if (this.target_akumulasi==0)
-  {
-    temp+="Target Akumulasi - ";
-  }
-  temp+="Tidak Boleh Kosong"
-  return temp
-}
 }

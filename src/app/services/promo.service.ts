@@ -51,4 +51,23 @@ export class PromoService {
     
     return this.http.post(url,body,httpOptions);
   }
+
+  updatePromoAkumulasi(kode_promo:string,title:string,subtitle:string,start_date:string,end_date:string,description:string,cashback:number,target_akumulasi:number):Observable<any>{
+    const url=environment.addAkumulasi+'/'+kode_promo;
+    var start_date_formatted = new DatePipe('en-US').transform(start_date, 'dd-MM-yyyy');
+    var end_date_formatted = new DatePipe('en-US').transform(end_date, 'dd-MM-yyyy');
+    console.log(cashback,target_akumulasi);
+    const body={
+      'title':title,
+      'subtitle':subtitle,
+      'start_date':start_date_formatted,
+      'end_date':end_date_formatted,
+      'description':description,
+      'cashback': cashback,
+      'target_akumulasi':target_akumulasi
+    }
+   console.log(body);
+    
+    return this.http.put(url,body,httpOptions);
+  }
 }
