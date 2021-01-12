@@ -1,28 +1,48 @@
-<div id="wrapper">
+<div id="wrapper" [ngClass]="isLogin">
     <app-navbar></app-navbar>
 <div class="main">
     <!-- MAIN CONTENT -->
     <div class="main-content">
         <div class="container-fluid">
             <!-- OVERVIEW -->
+
+          
+           
             <div class="panel panel-headline">
+
+               
+              
+                 <div style="display: flex; justify-content: center;height: 300px; align-items: center;" [ngClass]="loader" >
+                    <div class="loader-overview"></div>
+                </div>
+                <div [ngClass]="display">
                 <div class="panel-heading">
                     <h3 class="panel-title">Promo Akumulasi</h3>
                     <p class="panel-subtitle"></p>
                 </div>
                 
+
+
                 <div class="panel-body">
-                    <form [ngClass]="formClass"  (ngSubmit)="addPromoAkumulasi()" class="form-horizontal" action="create_new_class.php" method="post" style="margin-bottom: 30px;">
-                        Judul:<input type="text" class="form-control" style="width: 50%" name="title" [(ngModel)]="title" required><br>
-                        Subtitle Judul:<input type="text" class="form-control" style="width: 50%" name="subtitle" [(ngModel)]="subtitle" required><br>
+                    <form [ngClass]="formClass" #addPromoForm="ngForm" (ngSubmit)="addPromoAkumulasi(addPromoForm)" novalidate class="form-horizontal" action="create_new_class.php" method="post" style="margin-bottom: 30px;">
+                        Judul:<input type="text"  name="title" class="form-control" style="width: 50%" [(ngModel)]="title" required ><br>
+                        Subtitle :<input type="text"  name="subtitle" class="form-control" style="width: 50%"[(ngModel)]="subtitle" required ><br>
                         Tanggal Mulai Promo: <input type="date" class="form-control" style="width: 50%" name="start_Date" [(ngModel)]="start_date" required><br>
                         Tanggal Selsai Promo: <input type="date" class="form-control" style="width: 50%" name="end_Date" [(ngModel)]="end_date" required><br>
-                        Deskripsi: <textarea cols="10" rows="7" name="description" class="form-control" style="width: 50%; height: 50%;" [(ngModel)]="description"></textarea><br>
-                        Cashback:<input type="number" name="cashback" class="form-control" style="width: 50%" required [(ngModel)]="cashback"/><br>
+                        Deskripsi: <textarea cols="10" rows="7" name="description" class="form-control" style="width: 50%; height: 50%;"  [(ngModel)]="description"></textarea><br>
+                        Cashback:<input type="number" name="cashback" class="form-control" style="width: 50%" required  [(ngModel)]="cashback"/><br>
                         Target Akumulasi :<input type="number" name="target_akumulasi" style="width: 50%" class="form-control" required [(ngModel)]="target_akumulasi"/><br>
+                        <span style="color: red;">{{addPromoMessage}}</span>
                         <tr><td><input type="submit" name="submit" class="btn btn-primary"></td></tr>
                     </form>
-                    <table datatable [dtTrigger]="dtTrigger" [dtOptions]="dtOptions"   class="row-border hover">
+                 
+                    <div [ngClass]="alert" class="alert alert-dismissible show"  role="alert">
+                         {{alertMessage}} Promo.
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <table datatable [dtTrigger]="dtTrigger" [dtOptions]="dtOptions"  class="row-border hover">
                         <thead>
                           <tr>
                             
@@ -50,15 +70,10 @@
                               <td>{{promo.target_akumulasi}}</td>
                               <td><button class="btn btn-primary" id="{{promo.kode_promo}}" >Edit </button></td>
                           </tr>
-                       
-
-                       
-                   
-
                         </tbody>
                        
                       </table>
-                      <button type="button" class="btn btn-success btn-toastr" data-context="success" data-message="This is success info" data-position="top-right">Success Info</button>
+                     
 <form action="" method="post" style="margin-top: 20px;">
 	<button type="submit" name="submit" (click)="toggleAdd()" class="btn btn-primary" value="Add" style="background-color: #ff3d2b; border-color:#ff3d2b; "><strong>Add Promo&nbsp;</strong><i class="fa fa-plus"></i></button>
 </form>
@@ -68,3 +83,13 @@
 </div>
 </div>
 </div>
+</div>
+
+
+ 
+                        <!--
+                        Tanggal Mulai Promo: <input type="date" class="form-control" style="width: 50%" name="start_Date" [(ngModel)]="start_date" required><br>
+                        Tanggal Selsai Promo: <input type="date" class="form-control" style="width: 50%" name="end_Date" [(ngModel)]="end_date" required><br>
+                        Deskripsi: <textarea cols="10" rows="7" name="description" class="form-control" style="width: 50%; height: 50%;" [(ngModel)]="description"></textarea><br>
+                        Cashback:<input type="number" name="cashback" class="form-control" style="width: 50%" required [(ngModel)]="cashback"/><br>
+                        Target Akumulasi :<input type="number" name="target_akumulasi" style="width: 50%" class="form-control" required [(ngModel)]="target_akumulasi"/><br> -->

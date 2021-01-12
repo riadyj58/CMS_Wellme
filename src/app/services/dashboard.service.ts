@@ -12,7 +12,7 @@ export class DashboardService {
    
   }
    
-   getDashboard(periodic:string,start_date:string,end_date:string):Observable<any>{
+   getDashboard(periodic:string,start_date:string|null,end_date:string|null):Observable<any>{
      const url=environment.dashboardUrl+'/'+periodic+'/'+start_date+'/'+end_date;
      console.log(url);
      const request={

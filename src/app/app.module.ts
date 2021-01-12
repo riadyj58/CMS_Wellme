@@ -11,6 +11,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { DataTablesModule } from 'angular-datatables';
 import { PromoAkumulasiComponent } from './components/promo-akumulasi/promo-akumulasi.component';
 import { PromoakumulasiComponent } from './components/promoakumulasi/promoakumulasi.component';
+import { ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,7 +27,8 @@ import { PromoakumulasiComponent } from './components/promoakumulasi/promoakumul
     HttpClientModule,
     FormsModule,
     DataTablesModule,
-    NgxWebstorageModule.forRoot()
+    NgxWebstorageModule.forRoot(),
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

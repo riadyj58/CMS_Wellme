@@ -16,6 +16,7 @@ export class LoginComponent implements OnInit {
   loader:any;
   message:string;
   messageAlert:any;
+  isLogin="hidden";
   constructor(private loginservice:LoginServicesService,private session:SessionStorageService,private router:Router, private sessionService:CheckSessionService) { 
     this.username="";
     this.password="";
@@ -55,13 +56,27 @@ export class LoginComponent implements OnInit {
     })
   }
   ngOnInit(): void {
-    
-    this.sessionService.checkSession().subscribe(response=> {
-      response.output_schema.session.message=="SUKSES"?this.router.navigate(['/']):null;
-    }, (error) => {
-      error.error.output_schema.session.message=="SUKSES"?null:this.router.navigate(['/login']);
-    });
+    this.checkSession();
 
   }
-
+  checkSession():void{
+    this.sessionService.checkSession().subscribe(response=> {
+        
+        
+      if(response.output_schema.session.message=="SUKSES"){
+        
+        console.log("login hit");
+        this.session.store("username",response.output_schema.session.username);
+        this.session.store("token",response.output_schema.session.new_token);
+        this.router.navigate(['/'])
+  
+      }
+      else{
+        this.isLogin="block";
+      }
+    }, (error) => {
+      this.isLogin="block";
+      
+    });
+  }
 }

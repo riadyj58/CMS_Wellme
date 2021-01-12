@@ -45,6 +45,12 @@
       "pathRewrite": {
         "^/promo/akumulasi": ""
       }
+    },
+
+    "/promo/akumulasi/*": {
+      "target": "http://10.8.0.2:8091",
+      "secure": false,
+      "changeOrigin": false
     }
     ,  "/dashboard/overview/*": {
       "target": "http://10.8.0.2:8091",
