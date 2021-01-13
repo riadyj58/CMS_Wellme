@@ -12,6 +12,9 @@ import { DataTablesModule } from 'angular-datatables';
 import { PromoAkumulasiComponent } from './components/promo-akumulasi/promo-akumulasi.component';
 import { PromoakumulasiComponent } from './components/promoakumulasi/promoakumulasi.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { PromokodeComponent } from './components/promokode/promokode.component';
+import { JenisReksadanaComponent } from './components/jenis-reksadana/jenis-reksadana.component';
+import { ProductReksadanaComponent } from './components/product-reksadana/product-reksadana.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,7 +22,10 @@ import { ReactiveFormsModule } from '@angular/forms';
     HomeComponent,
     NavbarComponent,
     PromoAkumulasiComponent,
-    PromoakumulasiComponent
+    PromoakumulasiComponent,
+    PromokodeComponent,
+    JenisReksadanaComponent,
+    ProductReksadanaComponent
   ],
   imports: [
     BrowserModule,

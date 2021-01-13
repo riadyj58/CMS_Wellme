@@ -1,0 +1,76 @@
+<div id="wrapper" [ngClass]="isLogin">
+    <app-navbar></app-navbar>
+<div class="main">
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <div class="container-fluid">
+            <!-- OVERVIEW -->
+
+          
+           
+            <div class="panel panel-headline">
+
+               
+              
+                 <div style="display: flex; justify-content: center;height: 300px; align-items: center;" [ngClass]="loader" >
+                    <div class="loader-overview"></div>
+                </div>
+                <div [ngClass]="display">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Promo Akumulasi</h3>
+                    <p class="panel-subtitle"></p>
+                </div>
+                
+
+
+                <div class="panel-body">
+                    <form [ngClass]="formClass" #addForm="ngForm" (ngSubmit)="addJenisReksadana(addForm)" novalidate class="form-horizontal" action="create_new_class.php" method="post" style="margin-bottom: 30px;">
+                      Nama Jenis Reksadana :<input type="text" maxlength="30" max="30"  name="namaJenis" class="form-control" style="width: 50%" [(ngModel)]="namaJenis" required ><br>  
+                      <div style=" margin-bottom: 10px;"><span style="color: red;">{{submitFormMessage}}</span></div>
+                        <tr><td><input type="submit" name="submit" class="btn btn-primary"></td></tr>
+                    </form>
+
+                    <form [ngClass]="formUpdateClass" #updateForm="ngForm" (ngSubmit)="updateJenisReksadana(updateForm)" novalidate class="form-horizontal" action="create_new_class.php" method="post" style="margin-bottom: 30px;">
+                        <input type="hidden" name="idJenis" [(ngModel)]="idJenis">
+                        Nama Jenis Reksadana :<input type="text" maxlength="30" max="30"  name="namaJenis" class="form-control" style="width: 50%" [(ngModel)]="namaJenis" required ><br>  
+                        <div style=" margin-bottom: 10px;"><span style="color: red;">{{submitFormMessage}}</span></div>
+                          <tr><td><input type="submit" name="submit" class="btn btn-primary"></td></tr>
+                      </form>
+                 
+                    <div [ngClass]="alert" class="alert alert-dismissible show"  role="alert">
+                         {{alertMessage}} Jenis Reksadana.
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <table  datatable [dtTrigger]="dtTrigger" [dtOptions]="dtOptions"  class="row-border hover">
+                        <thead>
+                          <tr>
+                            
+                                <th>ID Jenis Reksadana</th>
+                                <th>Nama Jenis Reksadana</th>
+                                <th>Edit Jenis Reksadana</th>
+                         
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr  *ngFor='let jenisReksadana of jenisReksadana'>
+                              <td>{{jenisReksadana.id_jenis}}</td>
+                              <td>{{jenisReksadana.nama_jenis}}</td>
+                              <td><button class="btn btn-primary" (click)="onSelect(jenisReksadana)">Edit </button>
+                            </td>
+                          </tr>
+                        </tbody>
+                       
+                      </table>
+                     
+<form action="" method="post" style="margin-top: 20px;">
+	<button type="submit" name="submit" (click)="toggleAdd()" class="btn btn-primary" value="Add" style="background-color: #ff3d2b; border-color:#ff3d2b; "><strong>Add Promo&nbsp;</strong><i class="fa fa-plus"></i></button>
+</form>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>

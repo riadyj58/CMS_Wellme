@@ -1,29 +1,26 @@
 import { DatePipe } from '@angular/common';
-import { stringify } from '@angular/compiler/src/util';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { FormBuilder, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 import { SessionStorageService } from 'ngx-webstorage';
-
 import { Subject } from 'rxjs';
 import { CheckSessionService } from 'src/app/services/check-session.service';
-import { LogoutService } from 'src/app/services/logout.service';
 import { PromoService } from 'src/app/services/promo.service';
 
 @Component({
-  selector: 'app-promoakumulasi',
-  templateUrl: './promoakumulasi.component.html',
-  styleUrls: ['./promoakumulasi.component.css']
+  selector: 'app-promokode',
+  templateUrl: './promokode.component.html',
+  styleUrls: ['./promokode.component.css']
 })
-export class PromoakumulasiComponent implements OnInit {
+export class PromokodeComponent implements OnInit {
   @Input() title:string="";
   @Input() subtitle:string="";
   @Input() start_date:string="";
   @Input() end_date:string="";
   @Input() description:string="";
   @Input() cashback:number=0;
-  @Input() target_akumulasi:number=0;
+  @Input() minimum_transaksi:number=0;
   isLogin="hidden";
   table:string='';
   addPromoMessage:string="";
@@ -54,13 +51,13 @@ export class PromoakumulasiComponent implements OnInit {
       processing: true,
       
     };
-    this.getPromoAkumulasi();
+    this.getPromoKode();
     
   }
   
-  getPromoAkumulasi():void{
+  getPromoKode():void{
     
-    this.promoService.getPromoAkumulasi().subscribe(response=>{
+    this.promoService.getPromoKode().subscribe(response=>{
       this.promo=response.output_schema;
       console.log(this.promo);
       
@@ -109,7 +106,7 @@ export class PromoakumulasiComponent implements OnInit {
     window.scroll(0,0);
   }
   
-  addPromoAkumulasi(ngform:NgForm):void{
+  addPromoKode(ngform:NgForm):void{
     
     
     if (ngform.valid && (new Date(this.start_date)<new Date(this.end_date))){
@@ -117,7 +114,7 @@ export class PromoakumulasiComponent implements OnInit {
       this.loader="flex";
       this.formClass='hidden';
       
-      this.promoService.addPromoAkumulasi(this.title,this.subtitle,this.start_date,this.end_date,this.description,this.cashback,this.target_akumulasi).subscribe(response=>{
+      this.promoService.addPromoKode(this.kodePromo,this.title,this.subtitle,this.start_date,this.end_date,this.description,this.cashback,this.minimum_transaksi).subscribe(response=>{
         console.log(response);
         if(response.error_schema.error_code=="BIT-00-000")
         {
@@ -125,12 +122,12 @@ export class PromoakumulasiComponent implements OnInit {
           this.alert="block alert-success";
           
           
-          this.getPromoAkumulasi();
+          this.getPromoKode();
         }
         else{
           this.alertMessage="Gagal Menambahkan";
           this.alert="block alert-danger";
-          this.getPromoAkumulasi();
+          this.getPromoKode();
         }
         this.resetForm();
         
@@ -138,7 +135,7 @@ export class PromoakumulasiComponent implements OnInit {
         this.resetForm();
         this.alertMessage="Gagal Menambahkan";
         this.alert="block alert-danger";
-        this.getPromoAkumulasi();
+        this.getPromoKode();
         console.log('-----> err', err);
       });
       
@@ -150,7 +147,7 @@ export class PromoakumulasiComponent implements OnInit {
     
   }
   
-  updatePromoAkumulasi(ngform:NgForm):void{
+  updatePromoKode(ngform:NgForm):void{
     
     
     if (ngform.valid && (new Date(this.start_date)<new Date(this.end_date))){
@@ -159,8 +156,8 @@ export class PromoakumulasiComponent implements OnInit {
       this.formClass='hidden';
       this.formUpdateClass="hidden";
       var c=this.cashback;
-      var t=this.target_akumulasi;
-      this.promoService.updatePromoAkumulasi(this.kodePromo,this.title,this.subtitle,this.start_date,this.end_date,this.description,c,t).subscribe(response=>{
+      var t=this.minimum_transaksi;
+      this.promoService.updatePromoKode(this.kodePromo,this.title,this.subtitle,this.start_date,this.end_date,this.description,c,t).subscribe(response=>{
         console.log(response);
        
         if(response.error_schema.error_code=="BIT-00-000")
@@ -169,12 +166,12 @@ export class PromoakumulasiComponent implements OnInit {
           this.alert="block alert-success";
           
           
-          this.getPromoAkumulasi();
+          this.getPromoKode();
         }
         else{
           this.alertMessage="Gagal Mengupdate";
           this.alert="block alert-danger";
-          this.getPromoAkumulasi();
+          this.getPromoKode();
         }
         this.resetForm();
         
@@ -184,7 +181,7 @@ export class PromoakumulasiComponent implements OnInit {
         this.alert="block alert-danger";
         this.formClass="hidden";
         this.formUpdateClass="hidden";
-        this.getPromoAkumulasi();
+        this.getPromoKode();
         console.log('-----> err', err);
       });
       
@@ -205,7 +202,7 @@ export class PromoakumulasiComponent implements OnInit {
     }
 
   }
-  deactivatePromoAkumulasi(kodePromo:string):void{
+  deactivatePromo(kodePromo:string):void{
 
     if(confirm("Apakah Anda yakin akan menonaktifkan promo?"))
     {
@@ -219,12 +216,12 @@ export class PromoakumulasiComponent implements OnInit {
         {
           this.alertMessage="Berhasil Menonaktifkan";
           this.alert="block alert-success";
-          this.getPromoAkumulasi();
+          this.getPromoKode();
         }
         else{
           this.alertMessage="Gagal Menonaktifkan";
           this.alert="block alert-danger";
-          this.getPromoAkumulasi();
+          this.getPromoKode();
         }
         this.resetForm();
         
@@ -232,7 +229,7 @@ export class PromoakumulasiComponent implements OnInit {
         this.resetForm();
         this.alertMessage="Gagal Menonaktifkan";
         this.alert="block alert-danger";
-        this.getPromoAkumulasi();
+        this.getPromoKode();
         console.log('-----> err', err);
       });
     }
@@ -245,7 +242,11 @@ export class PromoakumulasiComponent implements OnInit {
 
   validationMessage():string
   {
+    
     var temp="";
+    if (this.kodePromo==""){
+      temp+="Kode Promo -"
+    }
     if (this.title=="")
     {
       temp+="Judul - ";
@@ -268,9 +269,9 @@ export class PromoakumulasiComponent implements OnInit {
       temp+="Cashback - ";
     }
     
-    if (this.target_akumulasi==0)
+    if (this.minimum_transaksi==0)
     {
-      temp+="Target Akumulasi - ";
+      temp+="Target kode - ";
       
     }
     if(temp!="")
@@ -281,6 +282,10 @@ export class PromoakumulasiComponent implements OnInit {
     if (new Date(this.start_date)>new Date(this.end_date))
     {
       temp+="- Tanggal Mulai Tidak Bisa Lebih Besar dari tanggal Selesai"; 
+    }
+    if (this.kodePromo.length>10)
+    {
+      temp+="- Panjang Kode Promo Tidak boleh lebih dari 10"; 
     }
     return temp
   }
@@ -304,21 +309,23 @@ export class PromoakumulasiComponent implements OnInit {
     this.start_date= start_date_formatted==null?"":start_date_formatted;
     this.end_date=end_date_formatted==null?"":end_date_formatted;
     this.description=selectedItem.description;
+    this.minimum_transaksi=selectedItem.minimum_transaction;
     this.cashback=Number(selectedItem.cashback);
-    this.target_akumulasi=Number(selectedItem.target_akumulasi);
+    this.minimum_transaksi=Number(selectedItem.minimum_transaction);
     window.scroll(0,0);
     
   }
   
   resetForm():void
   {
+    this.kodePromo="";
     this.title="";
     this.subtitle="";
     this.start_date="";
     this.end_date="";
     this.description="";
     this.cashback=0;
-    this.target_akumulasi=0;
+    this.minimum_transaksi=0;
   }
 
   validateDate(promo:any):boolean{
@@ -333,4 +340,5 @@ export class PromoakumulasiComponent implements OnInit {
       return true;
     }
   }
+
 }

@@ -24,28 +24,29 @@
 
 
                 <div class="panel-body">
-                    <form [ngClass]="formClass" #addPromoForm="ngForm" (ngSubmit)="addPromoAkumulasi(addPromoForm)" novalidate class="form-horizontal" action="create_new_class.php" method="post" style="margin-bottom: 30px;">
-                        Judul:<input type="text"  name="title" class="form-control" style="width: 50%" [(ngModel)]="title" required ><br>
+                    <form [ngClass]="formClass" #addPromoForm="ngForm" (ngSubmit)="addPromoKode(addPromoForm)" novalidate class="form-horizontal" action="create_new_class.php" method="post" style="margin-bottom: 30px;">
+                      Kode Promo:<input type="text" maxlength="10" max="10"  name="kodePromo" class="form-control" style="width: 50%" [(ngModel)]="kodePromo" required ><br>  
+                      Judul:<input type="text"  name="title" class="form-control" style="width: 50%" [(ngModel)]="title" required ><br>
                         Subtitle :<input type="text"  name="subtitle" class="form-control" style="width: 50%"[(ngModel)]="subtitle" required ><br>
                         Tanggal Mulai Promo: <input type="date" class="form-control" style="width: 50%" name="start_Date" [(ngModel)]="start_date" required><br>
                         Tanggal Selsai Promo: <input type="date" class="form-control" style="width: 50%" name="end_Date" [(ngModel)]="end_date" required><br>
                         Deskripsi: <textarea cols="10" rows="7" name="description" class="form-control" style="width: 50%; height: 50%;"  [(ngModel)]="description"></textarea><br>
                         Cashback:<input type="number" name="cashback" class="form-control" style="width: 50%" required  [(ngModel)]="cashback"/><br>
-                        Target Akumulasi :<input type="number" name="target_akumulasi" style="width: 50%" class="form-control" required [(ngModel)]="target_akumulasi"/><br>
+                        Minimum Transaksi :<input type="number" name="target_akumulasi" style="width: 50%" class="form-control" required [(ngModel)]="minimum_transaksi"/><br>
                         <div style=" margin-bottom: 10px;"><span style="color: red;">{{addPromoMessage}}</span></div>
                         <tr><td><input type="submit" name="submit" class="btn btn-primary"></td></tr>
                     </form>
 
-                    <form [ngClass]="formUpdateClass" #updatePromoForm="ngForm" (ngSubmit)="updatePromoAkumulasi(updatePromoForm)" novalidate class="form-horizontal" action="create_new_class.php" method="post" style="margin-bottom: 30px;">
-                        <input type="hidden" name="kode_promo" [(ngModel)]="kodePromo">
+                    <form [ngClass]="formUpdateClass" #updatePromoForm="ngForm" (ngSubmit)="updatePromoKode(updatePromoForm)" novalidate class="form-horizontal" action="create_new_class.php" method="post" style="margin-bottom: 30px;">
+                      KodePromo:<input type="text"  name="kodePromo" class="form-control" style="width: 50%" [(ngModel)]="kodePromo" required disabled><br>  
                         Judul:<input type="text"  name="title" class="form-control" style="width: 50%" [(ngModel)]="title" required ><br>
                         Subtitle :<input type="text"  name="subtitle" class="form-control" style="width: 50%"[(ngModel)]="subtitle" required ><br>
                         Tanggal Mulai Promo: <input type="date" class="form-control" style="width: 50%" name="start_Date" [(ngModel)]="start_date" required><br>
                         Tanggal Selsai Promo: <input type="date" class="form-control" style="width: 50%" name="end_Date" [(ngModel)]="end_date" required><br>
                         Deskripsi: <textarea cols="10" rows="7" name="description" class="form-control" style="width: 50%; height: 50%;"  [(ngModel)]="description"></textarea><br>
                         Cashback:<input type="number" name="cashback" class="form-control" style="width: 50%" required  [(ngModel)]="cashback"/><br>
-                        Target Akumulasi :<input type="number" name="target_akumulasi" style="width: 50%" class="form-control" required [(ngModel)]="target_akumulasi"/><br>
-                        <div style=" margin-bottom: 10px;"><span style="color: red;">{{addPromoMessage}}</span></div>
+                        Minimum Transaksi :<input type="number" name="target_akumulasi" style="width: 50%" class="form-control" required [(ngModel)]="minimum_transaksi"/><br>
+                        <span style="color: red;">{{addPromoMessage}}</span>
                         <tr><td><input type="submit" name="submit" class="btn btn-primary"></td></tr>
                     </form>
                  
@@ -66,7 +67,7 @@
                                 <th>Tanggal Selesai</th>
                                 <th>Deskripsi</th>
                                 <th>Cashback</th>
-                                <th>Target Akumulasi</th>
+                                <th>Minimum Transaksi</th>
                                 <th>Aktif</th>
                                 <th>Edit Promo</th>
                                 <th>Delete Promo</th>
@@ -82,14 +83,14 @@
                               <td>{{promo.end_date}}</td>
                               <td>{{promo.description}}</td>
                               <td>{{promo.cashback}}</td>
-                              <td>{{promo.target_akumulasi}}</td>
+                              <td>{{promo.minimum_transaction}}</td>
                               <td><div *ngIf="isActive(promo.active_status)">Aktif</div>
                                 <div *ngIf="!isActive(promo.active_status)">Non Aktif</div>
                             </td>
                               <td><div *ngIf="validateDate(promo)"><button class="btn btn-primary" (click)="onSelect(promo)">Edit </button></div>
                                 <div *ngIf="!validateDate(promo)"><button class="btn btn-primary"  disabled>Edit </button></div>
                             </td>
-                            <td><button class="btn btn-danger"  (click)="deactivatePromoAkumulasi(promo.kode_promo)">Non Aktifkan</button>
+                            <td><button class="btn btn-danger"  (click)="deactivatePromo(promo.kode_promo)">Non Aktifkan</button>
                           </td>
                           </tr>
                         </tbody>
@@ -114,4 +115,4 @@
                         Tanggal Selsai Promo: <input type="date" class="form-control" style="width: 50%" name="end_Date" [(ngModel)]="end_date" required><br>
                         Deskripsi: <textarea cols="10" rows="7" name="description" class="form-control" style="width: 50%; height: 50%;" [(ngModel)]="description"></textarea><br>
                         Cashback:<input type="number" name="cashback" class="form-control" style="width: 50%" required [(ngModel)]="cashback"/><br>
-                        Target Akumulasi :<input type="number" name="target_akumulasi" style="width: 50%" class="form-control" required [(ngModel)]="target_akumulasi"/><br> -->
+                        Minimum Transaksi :<input type="number" name="target_akumulasi" style="width: 50%" class="form-control" required [(ngModel)]="target_akumulasi"/><br> -->

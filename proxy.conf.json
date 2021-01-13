@@ -30,6 +30,21 @@
       "pathRewrite": {
         "^/promoAkumulasiAPI": ""
       }
+    },
+    "/promoKodeAPI": {
+      "target": "http://10.8.0.2:8091/promo?filter=Promotions",
+      "secure": false,
+      "changeOrigin": false,
+      "pathRewrite": {
+        "^/promoKodeAPI": ""
+      }
+    },  "/addKode": {
+      "target": "http://10.8.0.2:8091/promo/transaksi",
+      "secure": false,
+      "changeOrigin": false,
+      "pathRewrite": {
+        "^/addKode": ""
+      }
     }
     ,  "/addAkumulasi": {
       "target": "http://10.8.0.2:8091/promo/akumulasi",
@@ -46,7 +61,19 @@
         "^/promo/akumulasi": ""
       }
     },
-
+      "/promo/transaksi": {
+      "target": "http://10.8.0.2:8091/promo/transaksi",
+      "secure": false,
+      "changeOrigin": false,
+      "pathRewrite": {
+        "^/promo/transaksi": ""
+      }
+    },
+    "/promo/transaksi/*": {
+      "target": "http://10.8.0.2:8091",
+      "secure": false,
+      "changeOrigin": false
+    },
     "/promo/akumulasi/*": {
       "target": "http://10.8.0.2:8091",
       "secure": false,
@@ -56,5 +83,29 @@
       "target": "http://10.8.0.2:8091",
       "secure": false,
       "changeOrigin": false
+    },
+
+    "/deactivatePromo/*": {
+      "target": "http://10.8.0.2:8091/promo",
+      "secure": false,
+      "changeOrigin": false,
+      "pathRewrite": {
+        "/deactivatePromo/*": ""
+      }
+    },
+
+    "/jenis-reksadana": {
+      "target": "http://10.8.0.2:8091/jenis-reksadana",
+      "secure": false,
+      "changeOrigin": false,
+      "pathRewrite": {
+        "/jenis-reksadana": ""
+      }
+    },
+    "/jenis-reksadana/*": {
+      "target": "http://10.8.0.2:8091",
+      "secure": false,
+      "changeOrigin": false
     }
+
   }

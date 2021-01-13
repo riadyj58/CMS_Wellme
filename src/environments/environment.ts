@@ -9,7 +9,11 @@ export const environment = {
   logoutURL: 'http://localhost:4200/logout',
   promoAkumulasiUrl: 'http://localhost:4200/promoAkumulasiAPI',
   addAkumulasi: 'http://localhost:4200/promo/akumulasi',
-  dashboardUrl:'http://localhost:4200/dashboard/overview'
+  dashboardUrl:'http://localhost:4200/dashboard/overview',
+  deletePromoUrl:'http://localhost:4200/deactivatePromo',
+  promoKodeUrl: 'http://localhost:4200/promoKodeAPI',
+  addKode: 'http://localhost:4200/promo/transaksi',
+  jenisReksadanaUrl:'http://localhost:4200/jenis-reksadana'
 };
 
 /*

@@ -70,4 +70,62 @@ export class PromoService {
     
     return this.http.put(url,body,httpOptions);
   }
+
+
+  getPromoKode():Observable<any>{
+    const url=environment.promoKodeUrl;
+    console.log(url);
+    const request={
+    }
+
+   
+    
+    return this.http.get(url,httpOptions);
+  }
+  addPromoKode(kodePromo:string,title:string,subtitle:string,start_date:string,end_date:string,description:string,cashback:number,minimum_transaksi:number):Observable<any>{
+   const url=environment.addKode;
+   var start_date_formatted = new DatePipe('en-US').transform(start_date, 'dd-MM-yyyy');
+   var end_date_formatted = new DatePipe('en-US').transform(end_date, 'dd-MM-yyyy');
+   
+   const body={
+     'kode_promo':kodePromo,
+     'title':title,
+     'subtitle':subtitle,
+     'start_date':start_date_formatted,
+     'end_date':end_date_formatted,
+     'description':description,
+     'cashback':cashback,
+     'minimum_transaction':minimum_transaksi
+   }
+  console.log(body);
+   
+   return this.http.post(url,body,httpOptions);
+ }
+
+ updatePromoKode(kode_promo:string,title:string,subtitle:string,start_date:string,end_date:string,description:string,cashback:number,minimum_transaksi:number):Observable<any>{
+   const url=environment.addKode+'/'+kode_promo;
+   var start_date_formatted = new DatePipe('en-US').transform(start_date, 'dd-MM-yyyy');
+   var end_date_formatted = new DatePipe('en-US').transform(end_date, 'dd-MM-yyyy');
+   const body={
+    'kode_promo':kode_promo,
+    'title':title,
+    'subtitle':subtitle,
+    'start_date':start_date_formatted,
+    'end_date':end_date_formatted,
+    'description':description,
+    'cashback':cashback,
+    'minimum_transaction':minimum_transaksi
+  }
+  console.log(body);
+   
+   return this.http.put(url,body,httpOptions);
+ }
+
+
+  deactivatePromo(kode_promo:string):Observable<any>{
+    console.log(kode_promo);
+    const url=environment.deletePromoUrl+'/'+kode_promo;
+    console.log(url);
+    return this.http.delete(url,httpOptions);
+  }
 }
