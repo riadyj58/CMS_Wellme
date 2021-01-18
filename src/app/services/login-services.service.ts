@@ -30,7 +30,6 @@ export class LoginServicesService {
       username:username,
       password:password
     }
-    console.log(request);
     return this.http.post(url,request,httpOptions);
   }
   
