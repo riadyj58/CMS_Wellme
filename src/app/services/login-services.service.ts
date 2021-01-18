@@ -8,7 +8,8 @@ const httpOptions={
     'Content-Type':'application/json',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS, GET, PUT',
-    'Access-Control-Allow-Origin': '*'
+    'Access-Control-Allow-Origin': '*',
+    'Identity': 'ERICIMPOSTORNYA',
   })
 }
 @Injectable({

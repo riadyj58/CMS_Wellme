@@ -30,4 +30,22 @@ export class DashboardService {
      
      return this.http.get(url,httpOptions);
    }
+
+   getDashboardPromo():Observable<any>{
+    const url=environment.dashboardPromoUrl;
+    const request={
+    }
+    var httpOptions={
+     headers:new HttpHeaders({
+       'Content-Type':'application/json',
+       'Access-Control-Allow-Headers': 'Content-Type',
+       'Access-Control-Allow-Methods': 'POST, OPTIONS, GET, PUT',
+       'Access-Control-Allow-Origin': '*',
+       'Identity':'ERICIMPOSTORNYA'
+   
+     })
+   }
+    
+    return this.http.get(url,httpOptions);
+  }
 }

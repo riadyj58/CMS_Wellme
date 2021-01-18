@@ -94,6 +94,15 @@
       }
     },
 
+    "/dashboard/promo": {
+      "target": "http://10.8.0.2:8091/dashboard/promo",
+      "secure": false,
+      "changeOrigin": false,
+      "pathRewrite": {
+        "/dashboard/promo": ""
+      }
+    },
+
     "/jenis-reksadana": {
       "target": "http://10.8.0.2:8091/jenis-reksadana",
       "secure": false,
@@ -106,6 +115,61 @@
       "target": "http://10.8.0.2:8091",
       "secure": false,
       "changeOrigin": false
-    }
+    },
 
+    "/produk-reksadana": {
+      "target": "http://10.8.0.2:8091/produk-reksadana",
+      "secure": false,
+      "changeOrigin": false,
+      "pathRewrite": {
+        "/produk-reksadana": ""
+      }
+    },
+
+    "/transaction-history/pembelian": {
+      "target": "http://10.8.0.2:8091/transaction-history/pembelian",
+      "secure": false,
+      "changeOrigin": false,
+      "pathRewrite": {
+        "/transaction-history/pembelian": ""
+      }
+    },
+    "/transaction-history/penjualan": {
+      "target": "http://10.8.0.2:8091/transaction-history/penjualan",
+      "secure": false,
+      "changeOrigin": false,
+      "pathRewrite": {
+        "/transaction-history/penjualan": ""
+      }
+    },
+    "/bobot-resiko": {
+      "target": "http://10.8.0.2:8091/bobot-resiko",
+      "secure": false,
+      "changeOrigin": false,
+      "pathRewrite": {
+        "/bobot-resiko": ""
+      }
+    },
+
+    "/transaction-history/pembelian/*": {
+      "target": "http://10.8.0.2:8091",
+      "secure": false,
+      "changeOrigin": false
+    },
+
+    "/transaction-history/penjualan/*": {
+      "target": "http://10.8.0.2:8091",
+      "secure": false,
+      "changeOrigin": false
+    }
+    ,"/daily-nab/products/*": {
+      "target": "http://10.8.0.2:8091",
+      "secure": false,
+      "changeOrigin": false
+    }
+    ,"/daily-nab/products": {
+      "target": "http://10.8.0.2:8091",
+      "secure": false,
+      "changeOrigin": false
+    }
   }

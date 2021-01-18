@@ -36,7 +36,7 @@ export class PromoakumulasiComponent implements OnInit {
   @ViewChild(DataTableDirective)
   dtElement: DataTableDirective;
   isDtInitialized:boolean = false
-  dtOptions: DataTables.Settings = {};
+  dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject();
   alert:string="hidden";
   alertMessage:string="";
@@ -52,7 +52,22 @@ export class PromoakumulasiComponent implements OnInit {
       pagingType: 'full_numbers',
       pageLength: 10,
       processing: true,
-      
+      columns:[
+  
+        {title:'ID Promo'},
+        {title:'Judul'},
+        {title:'Subtitle',class:'none'},
+        {title:'Tanggal Mulai'},
+        {title:'Tanggal Selesai'},
+        {title:'Deskripsi',class:'none'},
+        {title:'Cashback'},
+        {title:'Target Akumulasi'},
+        {title:'Aktif Status'},
+        {title:'Edit Promo'},
+        {title:'Delete Promo'}
+
+      ]
+    ,responsive:true
     };
     this.getPromoAkumulasi();
     
@@ -78,29 +93,30 @@ export class PromoakumulasiComponent implements OnInit {
       this.loader="hidden";
       
     }, (err) => {
+      this.display="block";
+      this.loader="hidden";
+      this.promo=err.output_schema;
       console.log('-----> err', err);
     });
   }
   
   checkSession():void{
+
     this.sessionService.checkSession().subscribe(response=> {
-      
       if(response.output_schema.session.message=="SUKSES"){
         this.isLogin="block";
-        console.log("login hit");
         this.session.store("username",response.output_schema.session.username);
         this.session.store("token",response.output_schema.session.new_token);
-        
-        
       }
       else{
         this.router.navigate(['/login'])
       }
     }, (error) => {
-      
-      
+  
+      this.router.navigate(['/login'])
     });
   }
+  
   
   toggleAdd():void{
     this.formClass='block';

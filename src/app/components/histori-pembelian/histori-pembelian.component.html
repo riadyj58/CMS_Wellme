@@ -1,0 +1,60 @@
+<div id="wrapper" [ngClass]="isLogin">
+    <app-navbar></app-navbar>
+<div class="main">
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <div class="container-fluid">
+            <!-- OVERVIEW -->
+
+          
+           
+            <div class="panel panel-headline">
+
+               
+              
+                 <div style="display: flex; justify-content: center;height: 300px; align-items: center;" [ngClass]="loader" >
+                    <div class="loader-overview"></div>
+                </div>
+                <div [ngClass]="display">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Histori Pembelian</h3>
+                    <p class="panel-subtitle"></p>
+                </div>
+                
+
+
+                <div class="panel-body">
+                    
+                    <table  datatable [dtTrigger]="dtTrigger" [dtOptions]="dtOptions"  class="row-border hover">
+                     
+                        <tbody  *ngIf="historiPembelian">
+                          <tr  *ngFor='let historiPembelian of historiPembelian'>
+                              <td>{{historiPembelian.transaction_id}}</td>
+                              <td>{{historiPembelian.bca_id}}</td>
+                              <td>{{historiPembelian.nama_nasabah}}</td>
+                              <td>{{historiPembelian.email_nasabah}}</td>
+                              <td>{{historiPembelian.id_produk}}</td>
+                              <td>{{historiPembelian.nama_produk}}</td>
+                              <td>{{historiPembelian.id_plan}}</td>
+                              <td>{{historiPembelian.nama_plan}}</td>
+                              <td>{{historiPembelian.status_transaksi}}</td>
+                              <td>{{historiPembelian.kode_promo}}</td>
+                              <td>{{historiPembelian.nab==-1?"N/A":historiPembelian.nab}}</td>
+                              <td>{{historiPembelian.jumlah_unit==-1?"N/A":historiPembelian.jumlah_unit}}</td>
+                              <td>{{historiPembelian.total_nominal}}</td>
+                              <td>{{historiPembelian.tanggal_transaksi}}</td>
+                              <td>{{historiPembelian.tanggal_verifikasi_bank}}</td>
+                              <td>{{historiPembelian.tanggal_verifikasi_penjualan}}</td>
+                          </tr>
+                        </tbody>
+                       
+                      </table>
+                     
+
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>

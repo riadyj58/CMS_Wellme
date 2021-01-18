@@ -1,39 +1,39 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, Output, ɵConsole } from '@angular/core';
 import { Router } from '@angular/router';
 import { SessionStorageService } from 'ngx-webstorage';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { __param } from 'tslib';
 
-const httpOptions={
-  headers:new HttpHeaders({
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS, GET, PUT',
-    'Access-Control-Allow-Origin': '*'
-  },
-  ),
-  search:new URLSearchParams()
-}
+
 @Injectable({
   providedIn: 'root'
 })
 export class CheckSessionService {
-  
+  @Output() login:string="";
   constructor(private http:HttpClient, private session:SessionStorageService,private router:Router) { }
   
   checkSession():Observable<any> {
     const url=environment.checkSessionUrl;
-    var params=new URLSearchParams();
+      var username=this.session.retrieve("username")==undefined||this.session.retrieve("username")==null?"":this.session.retrieve("username")
+      var token=this.session.retrieve("token")==undefined||this.session.retrieve("token")==null?"":this.session.retrieve("token")
+      var httpOptions={
+        headers:new HttpHeaders({
+          'Content-Type':'application/json',
+          'Access-Control-Allow-Headers': 'Content-Type',
+          'Access-Control-Allow-Methods': 'POST, OPTIONS, GET, PUT',
+          'Access-Control-Allow-Origin': '*',
+          'Identity':'ERICIMPOSTORNYA',
+          'Username':username,
+          'Token':token,
 
-      params.append("username",this.session.retrieve("username"));
-      params.append("token",this.session.retrieve("token"));
       
-      httpOptions.search=params;
+        })
+      };
+    console.log(httpOptions);    
     
-    
-    
-    return this.http.get(url+"?"+params.toString(),httpOptions);
+    return this.http.get(url,httpOptions);
     
   }
 
@@ -49,27 +49,24 @@ export class CheckSessionService {
   }
 
 
-  isLoginGeneral():boolean{
-    var islogin=this.isLogin().then(response=> {
-        
-        
+
+  
+
+  isLoginGeneral():void{
+
+    this.checkSession().subscribe(response=> {
       if(response.output_schema.session.message=="SUKSES"){
-        console.log("login hit");
+        this.login="block";
         this.session.store("username",response.output_schema.session.username);
         this.session.store("token",response.output_schema.session.new_token);
-        
-  
       }
       else{
         this.router.navigate(['/login'])
       }
     }, (error) => {
   
-      
-    }).catch(err=>{
-      console.log(err);
+      this.router.navigate(['/login'])
     });
-    return true;
   }
 
   isLoginPage():void{

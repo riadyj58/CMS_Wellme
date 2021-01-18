@@ -33,6 +33,13 @@ export class HomeComponent implements OnInit {
   total_asset=0;
   percentage_total_asset=0;
   iconTotalAsset="";
+  promoObjective:any=[];
+  promoKode:any=[];
+  xAxisObjectives:any=[];
+  yAxisObjectives:any=[];
+  xAxisKode:any=[];
+  yAxisKode:any=[];
+  total_asset_periode_sebelumnya:number=0;
   constructor(private datePipe: DatePipe,private session:SessionStorageService,private router:Router, private sessionService:CheckSessionService,private dashboardService:DashboardService) {
     
     this.end_date = this.datePipe.transform(this.nowDate, 'yyyy-MM-dd');
@@ -42,23 +49,19 @@ export class HomeComponent implements OnInit {
   
   
   checkSession():void{
+
     this.sessionService.checkSession().subscribe(response=> {
-        
-        
       if(response.output_schema.session.message=="SUKSES"){
         this.isLogin="block";
-        console.log("login hit");
         this.session.store("username",response.output_schema.session.username);
         this.session.store("token",response.output_schema.session.new_token);
-        
-  
       }
       else{
         this.router.navigate(['/login'])
       }
     }, (error) => {
   
-      
+      this.router.navigate(['/login'])
     });
   }
   
@@ -67,37 +70,7 @@ export class HomeComponent implements OnInit {
     
     this.checkSession();
     this.renderOverview();
-   
-    
-      (function($){
-        var data, options;
-        
-        data = {
-          labels: ['Akhir Tahun', 'Lebaran', 'Waktu Indonesia Belanja','Promo BCA'],
-          series: [
-            [13000, 37201, 45000, 82000]
-          ]
-        };
-        
-        options = {
-          height: 300,
-          axisX: {
-            showGrid: false
-          },
-        };
-        
-        new Chartist.Bar('#visits-chart', data, options);
-        
-      })(jQuery);
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    this.renderPromoChart();  
   }
 
 
@@ -157,31 +130,9 @@ export class HomeComponent implements OnInit {
         
         new Chartist.Line('#headline-chart', data, options);
       }(jQuery));  
-        var lastItemPembelian = this.yAxisPembelian.slice(-1)[0];
-    var lastItemPenjualan = this.yAxisPenjualan.slice(-1)[0];
-    
-    lastItemPembelian=lastItemPembelian==undefined?0:lastItemPembelian;
-    lastItemPenjualan=lastItemPenjualan==undefined?0:lastItemPenjualan;
 
-//fa fa-caret-up text-success
-//fa fa-caret-down text-danger
-this.total_penjualan=lastItemPembelian;
-var penjualanPeriodeSebelumnya=this.yAxisPembelian.slice(-2)[0];
+      this.calculateDashboardOverview();
 
-
-penjualanPeriodeSebelumnya=penjualanPeriodeSebelumnya==undefined||penjualanPeriodeSebelumnya==null?this.total_penjualan*100:penjualanPeriodeSebelumnya;
-
-this.percentage_total_penjualan = (-(penjualanPeriodeSebelumnya/(this.total_penjualan==0?1:this.total_penjualan))+1)*100;
-this.percentage_total_penjualan>=0?this.iconTotalPenjualan="fa fa-caret-up text-success":"fa fa-caret-down text-danger";
-
-
-this.total_asset=lastItemPembelian-lastItemPenjualan;
-var transaksiJualPeriodeSebelumnya=this.yAxisPenjualan.slice(-2)[0];
-transaksiJualPeriodeSebelumnya=transaksiJualPeriodeSebelumnya==undefined||transaksiJualPeriodeSebelumnya==null?this.total_asset:transaksiJualPeriodeSebelumnya;
-this.percentage_total_asset = ((penjualanPeriodeSebelumnya/(transaksiJualPeriodeSebelumnya==0?1:transaksiJualPeriodeSebelumnya)*100)-100);
-this.percentage_total_asset>=0?this.iconTotalAsset="fa fa-caret-up text-success":"fa fa-caret-down text-danger";
-// percentage_total_asset=0;
-// iconTotalAsset="";
       this.display="block"
       this.loader="hidden";
     }, (error) => {
@@ -191,9 +142,113 @@ this.percentage_total_asset>=0?this.iconTotalAsset="fa fa-caret-up text-success"
     
   
   }
-  
+
   reRenderOverview():void{
     this.renderOverview();
   }
+
+
+  calculateDashboardOverview():void{
+    var lastItemPembelian = this.yAxisPembelian.slice(-1)[0]==undefined||this.yAxisPembelian.slice(-1)[0]==null?0:this.yAxisPembelian.slice(-1)[0];
+    var lastItemPenjualan = this.yAxisPenjualan.slice(-1)[0]==undefined||this.yAxisPenjualan.slice(-1)[0]==null?0:this.yAxisPenjualan.slice(-1)[0];
+    var penjualanPeriodeSebelumnya=this.yAxisPembelian.slice(-2)[0]==undefined||this.yAxisPembelian.slice(-2)[0]==null?0:this.yAxisPembelian.slice(-2)[0];
+    var transaksiJualPeriodeSebelumnya=this.yAxisPenjualan.slice(-2)[0]==undefined||this.yAxisPenjualan.slice(-2)[0]==null?0:this.yAxisPenjualan.slice(-2)[0];
+
+lastItemPembelian=lastItemPembelian==undefined?0:lastItemPembelian;
+lastItemPenjualan=lastItemPenjualan==undefined?0:lastItemPenjualan;
+
+//fa fa-caret-up text-success
+//fa fa-caret-down text-danger
+this.total_penjualan=lastItemPembelian;
+
+
+penjualanPeriodeSebelumnya=penjualanPeriodeSebelumnya==undefined||penjualanPeriodeSebelumnya==null?this.total_penjualan*100:penjualanPeriodeSebelumnya;
+
+this.percentage_total_penjualan = (-(penjualanPeriodeSebelumnya/(this.total_penjualan==0?1:this.total_penjualan))+1)*100;
+this.percentage_total_penjualan>=0?this.iconTotalPenjualan="fa fa-caret-up text-success":this.iconTotalPenjualan="fa fa-caret-down text-danger";
+
+
+this.total_asset=lastItemPembelian-lastItemPenjualan;
+this.total_asset_periode_sebelumnya=penjualanPeriodeSebelumnya-transaksiJualPeriodeSebelumnya;
+this.total_asset_periode_sebelumnya==undefined||this.total_asset_periode_sebelumnya==null?this.total_asset_periode_sebelumnya=0:this.total_asset_periode_sebelumnya
+
+this.total_asset=undefined||this.total_asset==null?this.total_asset=0:this.total_asset;
+transaksiJualPeriodeSebelumnya=transaksiJualPeriodeSebelumnya==undefined||transaksiJualPeriodeSebelumnya==null?this.total_asset:transaksiJualPeriodeSebelumnya;
+this.percentage_total_asset = ((this.total_asset-this.total_asset_periode_sebelumnya)/this.total_asset)*100;
+
+this.percentage_total_asset>=0?this.iconTotalAsset="fa fa-caret-up text-success":this.iconTotalAsset="fa fa-caret-down text-danger";
+
+  }
+
+  renderPromoChart():void{
+    this.dashboardService.getDashboardPromo().subscribe(response=> {
+    
+      this.promoObjective=response.output_schema.objectives;
+      this.promoObjective=response.output_schema.promotions;
+
+      response.output_schema.objectives!=null?response.output_schema.objectives.forEach((element:any)=> {
+        this.xAxisObjectives.push(element.title);
+        this.yAxisObjectives.push(element.claim_qty);
+      }):null;
+      response.output_schema.promotions!=null?response.output_schema.promotions.forEach((element:any)=> {
+        this.xAxisKode.push(element.kode_promo);
+        this.yAxisKode.push(element.use_qty);
+      }):null;
+
+      jQuery.xAxisObjectives=this.xAxisObjectives;
+      jQuery.yAxisObjectives=this.yAxisObjectives;
+      jQuery.xAxisKode=this.xAxisKode
+      jQuery.yAxisKode=this.yAxisKode;
+      this.promoObjective=response.output_schema.objectives;
+      this.promoKode=response.output_schema.promotions;
+
+      (function($){
+        var data, options;
+        var data2, options2;
+        data = {
+          labels: jQuery.xAxisObjectives,
+          series: [
+            jQuery.yAxisObjectives
+          ]
+        };
+        
+        options = {
+          height: 300,
+          axisX: {
+            showGrid: false
+          },
+        };
+        
+        new Chartist.Bar('#promo-objectives', data, options);
+        
+        data2 = {
+          labels: jQuery.xAxisKode,
+          series: [
+            jQuery.yAxisKode
+          ]
+        };
+        
+        options2 = {
+          height: 300,
+          axisX: {
+            showGrid: false
+          },
+        };
+        
+        new Chartist.Bar('#promo-kode', data2, options2);
+        
+      })(jQuery);
+    
+    
+    }, (error) => {
+      console.log('error -->',error);
+    });
+
+    
   
+  }
+
+
+
+
 }

@@ -15,6 +15,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { PromokodeComponent } from './components/promokode/promokode.component';
 import { JenisReksadanaComponent } from './components/jenis-reksadana/jenis-reksadana.component';
 import { ProductReksadanaComponent } from './components/product-reksadana/product-reksadana.component';
+import { HistoriPembelianComponent } from './components/histori-pembelian/histori-pembelian.component';
+import { HistoriPenjualanComponent } from './components/histori-penjualan/histori-penjualan.component';
+import { HistoriPenjualanNasabahComponent } from './components/histori-penjualan-nasabah/histori-penjualan-nasabah.component';
+import { HistoriPembelianNasabahComponent } from './components/histori-pembelian-nasabah/histori-pembelian-nasabah.component';
+import { InputNABComponent } from './components/input-nab/input-nab.component';
+import { BobotResikoComponent } from './components/bobot-resiko/bobot-resiko.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,7 +31,13 @@ import { ProductReksadanaComponent } from './components/product-reksadana/produc
     PromoakumulasiComponent,
     PromokodeComponent,
     JenisReksadanaComponent,
-    ProductReksadanaComponent
+    ProductReksadanaComponent,
+    HistoriPembelianComponent,
+    HistoriPenjualanComponent,
+    HistoriPenjualanNasabahComponent,
+    HistoriPembelianNasabahComponent,
+    InputNABComponent,
+    BobotResikoComponent
   ],
   imports: [
     BrowserModule,

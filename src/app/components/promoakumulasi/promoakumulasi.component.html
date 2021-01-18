@@ -24,7 +24,7 @@
 
 
                 <div class="panel-body">
-                    <form [ngClass]="formClass" #addPromoForm="ngForm" (ngSubmit)="addPromoAkumulasi(addPromoForm)" novalidate class="form-horizontal" action="create_new_class.php" method="post" style="margin-bottom: 30px;">
+                    <form [ngClass]="formClass" #addPromoForm="ngForm" (ngSubmit)="addPromoAkumulasi(addPromoForm)" novalidate class="form-horizontal"  method="post" style="margin-bottom: 30px;">
                         Judul:<input type="text"  name="title" class="form-control" style="width: 50%" [(ngModel)]="title" required ><br>
                         Subtitle :<input type="text"  name="subtitle" class="form-control" style="width: 50%"[(ngModel)]="subtitle" required ><br>
                         Tanggal Mulai Promo: <input type="date" class="form-control" style="width: 50%" name="start_Date" [(ngModel)]="start_date" required><br>
@@ -36,7 +36,7 @@
                         <tr><td><input type="submit" name="submit" class="btn btn-primary"></td></tr>
                     </form>
 
-                    <form [ngClass]="formUpdateClass" #updatePromoForm="ngForm" (ngSubmit)="updatePromoAkumulasi(updatePromoForm)" novalidate class="form-horizontal" action="create_new_class.php" method="post" style="margin-bottom: 30px;">
+                    <form [ngClass]="formUpdateClass" #updatePromoForm="ngForm" (ngSubmit)="updatePromoAkumulasi(updatePromoForm)" novalidate class="form-horizontal"  method="post" style="margin-bottom: 30px;">
                         <input type="hidden" name="kode_promo" [(ngModel)]="kodePromo">
                         Judul:<input type="text"  name="title" class="form-control" style="width: 50%" [(ngModel)]="title" required ><br>
                         Subtitle :<input type="text"  name="subtitle" class="form-control" style="width: 50%"[(ngModel)]="subtitle" required ><br>
@@ -55,6 +55,7 @@
                           <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
+                    <div class="table-responsive">
                     <table  datatable [dtTrigger]="dtTrigger" [dtOptions]="dtOptions"  class="row-border hover">
                         <thead>
                           <tr>
@@ -73,7 +74,7 @@
                          
                           </tr>
                         </thead>
-                        <tbody>
+                        <tbody  *ngIf="promo">
                           <tr  *ngFor='let promo of promo'>
                               <td>{{promo.kode_promo}}</td>
                               <td>{{promo.title}}</td>
@@ -95,7 +96,7 @@
                         </tbody>
                        
                       </table>
-                     
+                     </div>
 <form action="" method="post" style="margin-top: 20px;">
 	<button type="submit" name="submit" (click)="toggleAdd()" class="btn btn-primary" value="Add" style="background-color: #ff3d2b; border-color:#ff3d2b; "><strong>Add Promo&nbsp;</strong><i class="fa fa-plus"></i></button>
 </form>

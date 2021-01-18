@@ -1,1 +1,151 @@
-<p>product-reksadana works!</p>
+<div id="wrapper" [ngClass]="isLogin">
+    <app-navbar></app-navbar>
+<div class="main">
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <div class="container-fluid">
+            <!-- OVERVIEW -->
+
+          
+           
+            <div class="panel panel-headline">
+
+               
+              
+                 <div style="display: flex; justify-content: center;height: 300px; align-items: center;" [ngClass]="loader" >
+                    <div class="loader-overview"></div>
+                </div>
+                <div [ngClass]="display">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Produk Reksadana</h3>
+                    <p class="panel-subtitle"></p>
+                </div>
+                
+
+
+                <div class="panel-body">
+                  <form [ngClass]="formUpdateClass" #update="ngForm" (ngSubmit)="updateProdukReksadana(update)" novalidate class="form-horizontal" method="post" style="margin-bottom: 30px;">
+                    <input type="hidden" name="id_produk" [(ngModel)]="id_reksadana">
+                    Nama Produk:<input type="text"  name="nama_produk" class="form-control" style="width: 50%" [(ngModel)]="nama_produk" required ><br>
+                    Jenis Reksadana :<select name="id_jenis_reksadana" class="form-control" style="width: 50%"[(ngModel)]="id_jenis_reksadana" required >
+                      <option  *ngFor='let jenisReksadana of jenisReksadana' value={{jenisReksadana.id_jenis}}>
+                        {{jenisReksadana.nama_jenis}}
+                      </option>
+                    </select><br>
+                    Minimum Pembelian: <input type="number" class="form-control" style="width: 50%" name="minimum_pembelian" [(ngModel)]="minimum_pembelian" required><br>
+                    Expense Ratio: <input type="number" class="form-control" style="width: 50%" name="expense_ratio" [(ngModel)]="expense_ratio" required><br>
+                    Total Aum:<input type="number" class="form-control" style="width: 50%" name="total_aum" [(ngModel)]="total_aum" required> <br>
+                    Manager Investasi:<input type="text" name="manager_investasi" class="form-control" style="width: 50%" required  [(ngModel)]="manager_investasi"/><br>
+                    Tingkat Resiko:<select  name="level_resiko" style="width: 50%" class="form-control" required [(ngModel)]="level_resiko">
+                    <option value="1">Rendah</option>
+                    <option value="2">Sedang</option>
+                    <option value="3">Tinggi</option>
+                    </select><br>
+                    Bank Kustodian :<input type="text"  name="bank_kustodian" class="form-control" style="width: 50%"[(ngModel)]="bank_kustodian" required ><br>
+                    Bank Penampung: <input type="text" class="form-control" style="width: 50%" name="bank_penampung" [(ngModel)]="bank_penampung" required><br>
+                    URL Vendor: <input type="text" class="form-control" style="width: 50%" name="url_vendor" [(ngModel)]="url_vendor" required><br>
+                    Passowrd Vendor:<input type="password" class="form-control" style="width: 50%" name="password_vendor_md5" [(ngModel)]="password_vendor_md5" required><br>
+                    Biaya Pembelian:<input type="number" name="biaya_pembelian" class="form-control" style="width: 50%" required  [(ngModel)]="biaya_pembelian"/><br>
+                    
+                    
+                    <div style=" margin-bottom: 10px;"><span style="color: red;">{{addMessage}}</span></div>
+
+                    <tr><td><input type="submit" name="submit" class="btn btn-primary"></td></tr>
+                </form>
+
+                    <form [ngClass]="formClass" #add="ngForm" (ngSubmit)="addProdukReksadana(add)" novalidate class="form-horizontal" method="post" style="margin-bottom: 30px;">
+                        <input type="hidden" name="kode_produkReksadana" [(ngModel)]="id_jenis_reksadana">
+                        Nama Produk:<input type="text"  name="nama_produk" class="form-control" style="width: 50%" [(ngModel)]="nama_produk" required ><br>
+                        Jenis Reksadana :<select name="id_jenis_reksadana" class="form-control" style="width: 50%"[(ngModel)]="id_jenis_reksadana" required >
+                          <option  *ngFor="let jenisReksadana of jenisReksadana" value={{jenisReksadana.id_jenis}}>
+                            {{jenisReksadana.nama_jenis}}
+                          </option>
+                        </select><br>
+                        Minimum Pembelian: <input type="number" class="form-control" style="width: 50%" name="minimum_pembelian" [(ngModel)]="minimum_pembelian" required><br>
+                        Expense Ratio: <input type="number" class="form-control" style="width: 50%" name="expense_ratio" [(ngModel)]="expense_ratio" required><br>
+                        Total Aum:<input type="number" class="form-control" style="width: 50%" name="total_aum" [(ngModel)]="total_aum" required> <br>
+                        Manager Investasi:<input type="text" name="manager_investasi" class="form-control" style="width: 50%" required  [(ngModel)]="manager_investasi"/><br>
+                        Tingkat Resiko:<select  name="level_resiko" style="width: 50%" class="form-control" required [(ngModel)]="level_resiko">
+                          <option value="1">Rendah</option>
+                          <option value="2">Sedang</option>
+                          <option value="3">Tinggi</option>
+                          </select><br>
+                        Bank Kustodian :<input type="text"  name="bank_kustodian" class="form-control" style="width: 50%"[(ngModel)]="bank_kustodian" required ><br>
+                        Bank Penampung: <input type="text" class="form-control" style="width: 50%" name="bank_penampung" [(ngModel)]="bank_penampung" required><br>
+                        URL Vendor: <input type="text" class="form-control" style="width: 50%" name="url_vendor" [(ngModel)]="url_vendor" required><br>
+                        Passowrd Vendor:<input type="password" class="form-control" style="width: 50%" name="password_vendor_md5" [(ngModel)]="password_vendor_md5" required><br>
+                        Biaya Pembelian:<input type="number" min="1" name="biaya_pembelian" class="form-control" style="width: 50%" required  [(ngModel)]="biaya_pembelian"/><br>
+                        
+                        
+                        <div style=" margin-bottom: 10px;"><span style="color: red;">{{addMessage}}</span></div>
+
+                        <tr><td><input type="submit" name="submit" class="btn btn-primary"></td></tr>
+                    </form>
+
+                   
+                
+                    <div [ngClass]="alert" class="alert alert-dismissible show"  role="alert">
+                         {{alertMessage}} Produk Reksadana.
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                    <table  datatable [dtTrigger]="dtTrigger" [dtOptions]="dtOptions"  class="row-border hover">
+                        <!-- <thead>
+                          <th>Id Reksadana</th>
+                          <th>Nama Reksadana</th>
+                          <th>NAB</th>
+                          <th>Minimum Pembelian</th>
+                          <th>Expense Ratio</th>
+                          <th>Total Aum</th>
+                          <th>Manager Investasi</th>
+                          <th>Resiko</th>
+                          <th>Level Resiko</th>
+                          <th>Bank Kustodian</th>
+                          <th>Bank Penampung</th>
+                          <th>Kinerja Satu Minggu</th>
+                          <th>Kinerja Satu Bulan</th>
+                          <th>Kinerja Satu Tahun</th>
+                          <th>Id Jenis Reksadana</th>
+                          <th>Nama Jenis Reksadana</th>
+                          <th>URL Vendor</th>
+                          <th>Password Vendor</th>
+                        </thead> -->
+                        <tbody  *ngIf="produkReksadana">
+                          <tr  *ngFor='let produkReksadana of produkReksadana'>
+                              <td>{{produkReksadana.id_reksadana}}</td>
+                              <td>{{produkReksadana.nama_reksadana}}</td>
+                              <td>{{produkReksadana.nab}}</td>
+                              <td>{{produkReksadana.minimum_pembelian}}</td>
+                              <td>{{produkReksadana.expense_ratio}}</td>
+                              <td>{{produkReksadana.total_aum}}</td>
+                              <td>{{produkReksadana.manager_investasi}}</td>
+                              <td>{{produkReksadana.resiko}}</td>
+                              <td>{{produkReksadana.level_resiko}}</td>
+                              <td>{{produkReksadana.bank_kustodian}}</td>
+                              <td>{{produkReksadana.bank_penampung}}</td>
+                              <td>{{produkReksadana.kinerja_satu_minggu}}</td>
+                              <td>{{produkReksadana.kinerja_satu_bulan}}</td>
+                              <td>{{produkReksadana.kinerja_satu_tahun}}</td>
+                              <td>{{produkReksadana.id_jenis_reksadana}}</td>
+                              <td>{{produkReksadana.nama_jenis_reksadana}}</td>
+                              <td>{{produkReksadana.url_vendor}}</td>
+                              <td>{{produkReksadana.password_vendor_md5}}</td>
+                              <td>{{produkReksadana.biaya_pembelian}}</td>
+                              <td><button class="btn btn-primary" (click)="onSelect(produkReksadana)">Edit </button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+<form action="" method="post" style="margin-top: 20px;">
+	<button type="submit" name="submit" (click)="toggleAdd()" class="btn btn-primary" value="Add" style="background-color: #ff3d2b; border-color:#ff3d2b; "><strong>Add Product&nbsp;</strong><i class="fa fa-plus"></i></button>
+</form>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>

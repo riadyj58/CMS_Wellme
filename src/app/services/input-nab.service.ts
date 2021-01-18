@@ -16,16 +16,13 @@ const httpOptions={
 @Injectable({
   providedIn: 'root'
 })
-export class JenisReksadanaService {
-
+export class InputNABService {
   constructor(private http:HttpClient) {
    
   }
    
-   getJenisReksadana():Observable<any>{
-     const url=environment.jenisReksadanaUrl;
-     console.log(url); 
-     
+   getDailyNab(idJenis:string):Observable<any>{
+     const url=environment.dailyNabUrl+'/'+idJenis;     
      return this.http.get(url,httpOptions);
    }
   
@@ -43,5 +40,18 @@ export class JenisReksadanaService {
       'nama_jenis_reksadana':namaJenis
         }
     return this.http.put(url,body,httpOptions);
+  }
+
+  updateDailyNab(idProduk:number,nab:number):Observable<any>{
+    const url=environment.dailyNabUrl;
+    const body={
+      'input':[
+        {
+          'id_produk':Number(idProduk),
+          'nab':Number(nab)
+        }
+      ]
+        }
+    return this.http.post(url,body,httpOptions);
   }
 }

@@ -1,0 +1,63 @@
+<div id="wrapper" [ngClass]="isLogin">
+    <app-navbar></app-navbar>
+<div class="main">
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <div class="container-fluid">
+            <!-- OVERVIEW -->
+
+          
+           
+            <div class="panel panel-headline">
+
+           
+              
+                 <div style="display: flex; justify-content: center;height: 300px; align-items: center;" [ngClass]="loader" >
+                    <div class="loader-overview"></div>
+                </div>
+                <div [ngClass]="display">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Histori Penjualan</h3>
+                    <p class="panel-subtitle"></p>
+                </div>
+
+
+                <div class="panel-body">
+                    <form #searchForm="ngForm" (ngSubmit)="search(searchForm)" novalidate class="form-horizontal"  method="post" style="margin-bottom: 30px;">
+                        BCA Id: <input type="text"  name="bcaId" class="form-control" style="width: 50%" [(ngModel)]="bcaId" required ><br>
+                        <div style=" margin-bottom: 10px;"><span style="color: red;">{{submitFormMessage}}</span></div>
+                        <input type="submit" name="submit" class="btn btn-primary">
+                      </form>
+                    <table  datatable [dtTrigger]="dtTrigger" [dtOptions]="dtOptions"  class="row-border hover">
+                     
+                        <tbody  *ngIf="historiPenjualan">
+                          <tr  *ngFor='let historiPenjualan of historiPenjualan'>
+                              <td>{{historiPenjualan.transaction_id}}</td>
+                              <td>{{historiPenjualan.bca_id}}</td>
+                              <td>{{historiPenjualan.nama_nasabah}}</td>
+                              <td>{{historiPenjualan.email_nasabah}}</td> 
+                              <td>{{historiPenjualan.id_produk}}</td>
+                              <td>{{historiPenjualan.nama_produk}}</td>
+                              <td>{{historiPenjualan.id_plan}}</td>
+                              <td>{{historiPenjualan.nama_plan}}</td>
+                              <td>{{historiPenjualan.status_transaksi}}</td>
+                              <td>{{historiPenjualan.kode_promo}}</td>
+                              <td>{{historiPenjualan.nab==-1?"N/A":historiPenjualan.nab}}</td>
+                              <td>{{historiPenjualan.jumlah_unit==-1?"N/A":historiPenjualan.jumlah_unit}}</td>
+                              <td>{{historiPenjualan.total_nominal}}</td>
+                              <td>{{historiPenjualan.tanggal_transaksi}}</td>
+                              <td>{{historiPenjualan.tanggal_verifikasi_bank}}</td>
+                              <td>{{historiPenjualan.tanggal_verifikasi_penjualan}}</td>
+                          </tr>
+                        </tbody>
+                       
+                      </table>
+                     
+
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>

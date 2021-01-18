@@ -1,0 +1,66 @@
+<div id="wrapper" [ngClass]="isLogin">
+    <app-navbar></app-navbar>
+<div class="main">
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <div class="container-fluid">
+            <!-- OVERVIEW -->
+            <div class="panel panel-headline">
+                 <div style="display: flex; justify-content: center;height: 300px; align-items: center;" [ngClass]="loader" >
+                    <div class="loader-overview"></div>
+                </div>
+                <div [ngClass]="display">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Bobot Resiko</h3>
+                    <p class="panel-subtitle"></p>
+                </div>
+            
+                <div class="panel-body">
+                    <form [ngClass]="formUpdateClass" #updateForm="ngForm" (ngSubmit)="updateBobotResiko(updateForm)" novalidate class="form-horizontal"  method="post" style="margin-bottom: 30px;">
+    
+                        Bobot Resiko <input type="number" class="form-control" style="width: 50%;" name="bobotResiko" [(ngModel)]="bobotResikoNumber" disabled><br>
+                        <span *ngIf="bobotResiko">
+                        <span  *ngFor="let detailBobotResiko of bobotResiko[0].detail_bobot_resiko;let i = index" [attr.data-index]="i">
+
+                            {{detailBobotResiko.nama_jenis_reksadana}}
+
+                            <input type="number" class="form-control" style="width:50%;"  
+                            name="{{detailBobotResiko.id_jenis_reksadana}}" [(ngModel)]="bobotResikoArray[i]" required/>
+                        </span>
+                    </span>
+                        <br>
+                        <div style=" margin-bottom: 10px;"><span style="color: red;">{{submitFormMessage}}</span></div>
+                        <tr><td><input type="submit" name="submit" class="btn btn-primary"></td></tr>
+                    </form>
+                 
+                    <div [ngClass]="alert" class="alert alert-dismissible show"  role="alert">
+                         {{alertMessage}} Bobot Resiko.
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <table  datatable [dtTrigger]="dtTrigger" [dtOptions]="dtOptions"  class="row-border hover">
+                        <thead>
+                          <th  *ngFor='let columnTableBobotResiko of columnTableBobotResiko'>
+                                {{columnTableBobotResiko}}
+                          </th>
+                          <th>Edit</th>
+                        </thead>
+                        <tbody  *ngIf="bobotResiko">
+                          <tr  *ngFor='let bobotResikoTemp of bobotResiko'>
+                              <td>{{bobotResikoTemp.bobot_resiko}}</td>
+                              <td *ngFor='let detailBobotResiko of bobotResikoTemp.detail_bobot_resiko'>{{detailBobotResiko.persentase}} %</td>
+                              <td><button class="btn btn-primary" (click)="onSelect(bobotResikoTemp)" >Edit </button>
+                              </td>
+                          </tr>
+                        </tbody>
+                    </table>
+                     
+
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>

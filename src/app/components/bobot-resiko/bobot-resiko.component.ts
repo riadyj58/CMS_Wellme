@@ -5,37 +5,40 @@ import { Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 import { SessionStorageService } from 'ngx-webstorage';
 import { Subject } from 'rxjs';
+import { BobotResikoService } from 'src/app/services/bobot-resiko.service';
 import { CheckSessionService } from 'src/app/services/check-session.service';
-import { JenisReksadanaService } from 'src/app/services/jenis-reksadana.service';
 
 @Component({
-  selector: 'app-jenis-reksadana',
-  templateUrl: './jenis-reksadana.component.html',
-  styleUrls: ['./jenis-reksadana.component.css']
+  selector: 'app-bobot-resiko',
+  templateUrl: './bobot-resiko.component.html',
+  styleUrls: ['./bobot-resiko.component.css']
 })
-export class JenisReksadanaComponent implements OnInit {
+export class BobotResikoComponent implements OnInit {
   isLogin="hidden";
   table:string='';
   submitFormMessage:string="";
   display:string='hidden';
   loader:string="flex";
 
-  jenisReksadana:any=[];
+  bobotResiko:any=[];
   tab:string=``;
   formClass:string='hidden';
   @ViewChild(DataTableDirective)
   dtElement: DataTableDirective;
   isDtInitialized:boolean = false
-  dtOptions: DataTables.Settings = {};
+  dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject();
   alert:string="hidden";
   alertMessage:string="";
   alertClass:string="";
   formUpdateClass:string="hidden";
-
+  bobotResikoArray:any=[];
+columnTableBobotResiko :any=[];
   idJenis:string;
   namaJenis:string;
-  constructor(private fb: FormBuilder,private jenisReksadanaService:JenisReksadanaService,private router:Router, private session:SessionStorageService, private sessionService:CheckSessionService) {
+  columnIdBobotResiko:any=[];
+  bobotResikoNumber:string="";
+  constructor(private fb: FormBuilder,private bobotResikoService:BobotResikoService,private router:Router, private session:SessionStorageService, private sessionService:CheckSessionService) {
   
   }
   
@@ -47,15 +50,20 @@ export class JenisReksadanaComponent implements OnInit {
       processing: true,
       
     };
-    this.getJenisReksadana();
+    this.getBobotResiko();
     
   }
   
-  getJenisReksadana():void{
+  getBobotResiko():void{
     
-    this.jenisReksadanaService.getJenisReksadana().subscribe((response:any)=>{
-      this.jenisReksadana=response.output_schema;
-      console.log(this.jenisReksadana);
+    this.bobotResikoService.getBobotResiko().subscribe((response:any)=>{
+      this.bobotResiko=response.output_schema;
+      this.columnTableBobotResiko.push("Bobot Resiko")
+      this.bobotResiko[0]!=null||this.bobotResiko[0]!=undefined?this.bobotResiko[0].detail_bobot_resiko.forEach((element:any)=> {
+        this.columnTableBobotResiko.push(element.nama_jenis_reksadana);
+        this.columnIdBobotResiko.push(element.id_jenis_reksadana)
+      }):null;
+
       
       if (this.isDtInitialized) {
         this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
@@ -101,68 +109,24 @@ export class JenisReksadanaComponent implements OnInit {
     window.scroll(0,0);
   }
   
-  addJenisReksadana(ngform:NgForm):void{
-    
-    
-    if (ngform.valid){
+  updateBobotResiko(ngform:NgForm):void{
+
+    if (ngform.valid && this.bobotResikoArray.reduce((a:any, b:any) => a + b, 0)==100){
       this.display="hidden";
       this.loader="flex";
       this.formClass='hidden';
       
-      this.jenisReksadanaService.addJenisReksadana(this.namaJenis).subscribe(response=>{
-        console.log(response);
-        if(response.error_schema.error_code=="BIT-00-000")
-        {
-          this.alertMessage="Berhasil Menambahkan ";
-          this.alert="block alert-success";
-          
-          
-          this.getJenisReksadana();
-        }
-        else{
-          this.alertMessage="Gagal Menambahkan";
-          this.alert="block alert-danger";
-          this.getJenisReksadana();
-        }
-        this.resetForm();
-        
-      },(err:any) => {
-        this.resetForm();
-        this.alertMessage="Gagal Menambahkan";
-        this.alert="block alert-danger";
-        this.formClass="hidden";
-        this.formUpdateClass="hidden";
-        this.getJenisReksadana();
-        console.log('-----> err', err);
-      });
-      
-    }
-    else{
-      this.submitFormMessage=this.validationMessage();
-    }
-    
-    
-  }
-  
-  updateJenisReksadana(ngform:NgForm):void{
-    
-    
-    if (ngform.valid){
-      this.display="hidden";
-      this.loader="flex";
-      this.formClass='hidden';
-      
-      this.jenisReksadanaService.updateJenisReksadana(this.idJenis,this.namaJenis).subscribe(response=>{
+      this.bobotResikoService.updateBobotResiko(this.bobotResikoNumber,this.bobotResikoArray,this.columnIdBobotResiko).subscribe(response=>{
         if(response.error_schema.error_code=="BIT-00-000")
         {
           this.alertMessage="Berhasil Mengubah ";
           this.alert="block alert-success";
-          this.getJenisReksadana();
+          this.getBobotResiko();
         }
         else{
           this.alertMessage="Gagal Mengubah";
           this.alert="block alert-danger";
-          this.getJenisReksadana();
+          this.getBobotResiko();
         }
         this.resetForm();
       },(err:any) => {
@@ -171,7 +135,7 @@ export class JenisReksadanaComponent implements OnInit {
         this.alert="block alert-danger";
         this.formClass="hidden";
         this.formUpdateClass="hidden";
-        this.getJenisReksadana();
+        this.getBobotResiko();
         console.log('-----> err', err);
       });
       
@@ -189,29 +153,36 @@ export class JenisReksadanaComponent implements OnInit {
   {
     
     var temp="";
-    if (this.namaJenis==""){
-      temp+="Nama Jenis Tidak Boleh Kosong"
-    }    if (this.namaJenis.length>30)
+    if (this.bobotResikoArray.reduce((a:any, b:any) => a + b, 0)!=100){
+      temp+="Jumlah Persentase Tidak 100";
+    } else 
     {
-      temp+="- Panjang Nama Jenis Tidak Boleh Lebih Dari 30 Karakter"; 
+      temp+="Kolom Tidak Bole Ada yang Kosong"; 
     }
     return temp
   }
 
   onSelect(selectedItem: any) {
-  
-    this.resetForm();
+    this.bobotResikoArray=[];
     this.formUpdateClass="block";
     this.formClass="hidden";
-    this.idJenis=selectedItem.id_jenis;
-    this.namaJenis=selectedItem.nama_jenis;
+    this.bobotResikoNumber=selectedItem.bobot_resiko;
+  
+    selectedItem.detail_bobot_resiko.forEach((element:any) => {
+      this.bobotResikoArray.push(element.persentase);
+ 
+    });
     window.scroll(0,0);
   }
   
   resetForm():void
   {
-    this.idJenis="";
-    this.namaJenis="";
+ this.bobotResikoArray=[];
+ this.bobotResikoNumber="";
+ this.columnIdBobotResiko=[];
+ this.columnTableBobotResiko=[];
+ this.submitFormMessage="";
      }
+
 
 }
