@@ -43,7 +43,7 @@
 									<div class="metric">
 										<span class="icon"><i class="fa fa-money"></i></span>
 										<p>
-											<span class="number">{{jumlahInvestasi}}</span>
+											<span class="number">{{jumlahInvestasi|currency:'Rp ':true:'1.0'}}</span>
 											<span class="title">Jumlah Investasi</span>
 										</p>
 									</div>
@@ -73,11 +73,11 @@
 								</div>
 								<div class="col-md-3">
 									<div class="weekly-summary text-right">
-										<span class="number">Rp {{total_penjualan}}</span> <span class="percentage"><i  [ngClass]="iconTotalPenjualan"></i> {{percentage_total_penjualan}}%</span>
+										<span class="number">{{total_penjualan|currency:'Rp ':true:'1.0'}}</span> <span class="percentage"><i  [ngClass]="iconTotalPenjualan"></i> {{percentage_total_penjualan}}%</span>
 										<span class="info-label">Total Pembelian Nasabah / Periode</span>
 									</div>
 									<div class="weekly-summary text-right">
-										<span class="number">Rp {{total_asset}}</span> <span class="percentage"><i  [ngClass]="iconTotalAsset"></i> {{percentage_total_asset}}%</span>
+										<span class="number">{{total_asset|currency:'Rp ':true:'1.0'}}</span> <span class="percentage"><i  [ngClass]="iconTotalAsset"></i> {{percentage_total_asset}}%</span>
 										<span class="info-label">Total Aset / Periode</span>
 									</div>
 								</div>

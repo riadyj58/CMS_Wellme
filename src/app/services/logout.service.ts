@@ -28,6 +28,6 @@ export class LogoutService {
       })
     }
      
-     return this.http.get(url,httpOptions);
+     return this.http.post(url,{},httpOptions);
    }
 }
