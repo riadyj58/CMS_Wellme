@@ -24,7 +24,7 @@ export class CheckSessionService {
           'Access-Control-Allow-Headers': 'Content-Type',
           'Access-Control-Allow-Methods': 'POST, OPTIONS, GET, PUT',
           'Access-Control-Allow-Origin': '*',
-          'Identity':'ERICIMPOSTORNYA',
+          'Identity':'ead9c8c86bab17493373b8bf4434c8ca',
           'Username':username,
           'Token':token,
 
@@ -33,7 +33,7 @@ export class CheckSessionService {
       };
     console.log(httpOptions);    
     
-    return this.http.get(url,httpOptions);
+    return this.http.post(url,{},httpOptions);
     
   }
 
@@ -48,7 +48,24 @@ export class CheckSessionService {
 
   }
 
+  getHeader():any{
+    const url=environment.checkSessionUrl;
+    var username=this.session.retrieve("username")==undefined||this.session.retrieve("username")==null?"":this.session.retrieve("username")
+    var token=this.session.retrieve("token")==undefined||this.session.retrieve("token")==null?"":this.session.retrieve("token")
+    return {
+      headers:new HttpHeaders({
+        'Content-Type':'application/json',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS, GET, PUT',
+        'Access-Control-Allow-Origin': '*',
+        'Identity':'ead9c8c86bab17493373b8bf4434c8ca',
+        'Username':username,
+        'Token':token,
 
+    
+      })
+    };
+  }
 
   
 

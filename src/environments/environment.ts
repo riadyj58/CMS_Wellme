@@ -4,24 +4,50 @@
 
 export const environment = {
   production: false,
-  loginUrl:'http://localhost:4200/loginrequest',
-  checkSessionUrl:'http://localhost:4200/checkSession',
-  logoutURL: 'http://localhost:4200/logout',
-  promoAkumulasiUrl: 'http://localhost:4200/promoAkumulasiAPI',
-  addAkumulasi: 'http://localhost:4200/promo/akumulasi',
-  dashboardUrl:'http://localhost:4200/dashboard/overview',
-  dashboardPromoUrl:'http://localhost:4200/dashboard/promo',
-  deletePromoUrl:'http://localhost:4200/deactivatePromo',
-  promoKodeUrl: 'http://localhost:4200/promoKodeAPI',
-  addKode: 'http://localhost:4200/promo/transaksi',
-  jenisReksadanaUrl:'http://localhost:4200/jenis-reksadana',
-  produkReksadanaUrl:'http://localhost:4200/produk-reksadana',
-  historiPembelianUrl:'http://localhost:4200/transaction-history/pembelian',
-  historiPenjualanUrl:'http://localhost:4200/transaction-history/penjualan',
-  bobotResikoUrl:'http://localhost:4200/bobot-resiko',
-  dailyNabUrl:'http://localhost:4200/daily-nab/products'
+  loginUrl:'http://10.1.132.26:8092/login-admin',
+  checkSessionUrl:'http://10.1.132.26:8092/check-session-admin',
+  logoutURL: 'http://10.1.132.26:8092/logout-admin',
+  promoAkumulasiUrl: 'http://10.1.132.26:8091/promo?filter=Objectives',
+  addAkumulasi: 'http://10.1.132.26:8091/promo/akumulasi',
+  dashboardUrl:'http://10.1.132.26:8091/dashboard/overview',
+  dashboardPromoUrl:'http://10.1.132.26:8091/dashboard/promo',
+  deletePromoUrl:'http://10.1.132.26:8091/promo',
+  promoKodeUrl: 'http://10.1.132.26:8091/promo?filter=Promotions',
+  addKode: 'http://10.1.132.26:8091/promo/transaksi',
+  jenisReksadanaUrl:'http://10.1.132.26:8091/jenis-reksadana',
+  produkReksadanaUrl:'http://10.1.132.26:8091/produk-reksadana',
+  historiPembelianUrl:'http://10.1.132.26:8091/transaction-history/pembelian',
+  historiPenjualanUrl:'http://10.1.132.26:8091/transaction-history/penjualan',
+  bobotResikoUrl:'http://10.1.132.26:8091/bobot-resiko',
+  dailyNabUrl:'http://10.1.132.26:8091/daily-nab/products',
+  uploadProspektusUrl:'http://10.1.132.26:8098/prospektus/',
+  uploadfundFactUrl:'http://10.1.132.26:8098/fundfact/',
   
 };
+
+
+// export const environment = {
+//   production: true,
+//   loginUrl:'http://10.8.0.4:8080/loginAdmin',
+//   checkSessionUrl:'http://10.8.0.4:8080/checkSessionAdmin',
+//   logoutURL: 'http://10.8.0.4:8080/logoutAdmin',
+//   promoAkumulasiUrl: 'http://10.8.0.2:8091/promo?filter=Objectives',
+//   addAkumulasi: 'http://10.8.0.2:8091/promo/akumulasi',
+//   dashboardUrl:'http://10.8.0.2:8091/dashboard/overview',
+//   dashboardPromoUrl:'http://10.8.0.2:8091/dashboard/promo',
+//   deletePromoUrl:'http://10.8.0.2:8091/promo',
+//   promoKodeUrl: 'http://10.8.0.2:8091/promo?filter=Promotions',
+//   addKode: 'http://10.8.0.2:8091/promo/transaksi',
+//   jenisReksadanaUrl:'http://10.8.0.2:8091/jenis-reksadana',
+//   produkReksadanaUrl:'http://10.8.0.2:8091/produk-reksadana',
+//   historiPembelianUrl:'http://10.8.0.2:8091/transaction-history/pembelian',
+//   historiPenjualanUrl:'http://10.8.0.2:8091/transaction-history/penjualan',
+//   bobotResikoUrl:'http://10.8.0.2:8091/bobot-resiko',
+//   dailyNabUrl:'http://10.8.0.2:8091/daily-nab/products'
+// };
+
+
+
 
 /*
  * For easier debugging in development mode, you can import the following file

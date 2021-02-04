@@ -35,7 +35,7 @@ export class HistoriPenjualanComponent implements OnInit {
   alertMessage:string="";
   alertClass:string="";
   formUpdateClass:string="hidden";
-
+role:string="";
   idJenis:string;
   namaJenis:string;
   constructor(private fb: FormBuilder,private historiTransaksiService:HistoriTransaksiService,private router:Router, private session:SessionStorageService, private sessionService:CheckSessionService) {
@@ -102,9 +102,12 @@ export class HistoriPenjualanComponent implements OnInit {
 
     this.sessionService.checkSession().subscribe(response=> {
       if(response.output_schema.session.message=="SUKSES"){
+        this.role=response.output_schema.session.role;
+        this.role!="ADMIN"?this.router.navigate(['/']):null;
         this.isLogin="block";
         this.session.store("username",response.output_schema.session.username);
         this.session.store("token",response.output_schema.session.new_token);
+      
       }
       else{
         this.router.navigate(['/login'])
@@ -114,7 +117,6 @@ export class HistoriPenjualanComponent implements OnInit {
       this.router.navigate(['/login'])
     });
   }
-  
   
 
 }

@@ -23,7 +23,7 @@ export class LogoutService {
         'Access-Control-Allow-Methods': 'POST, OPTIONS, GET, PUT',
         'Access-Control-Allow-Origin': '*',
         'Token':token,
-        'Identity':'ERICIMPOSTORNYA'
+        'Identity':'ead9c8c86bab17493373b8bf4434c8ca'
     
       })
     }

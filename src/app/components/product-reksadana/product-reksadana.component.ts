@@ -1,4 +1,5 @@
 import { DatePipe } from '@angular/common';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -8,6 +9,7 @@ import { SessionStorageService } from 'ngx-webstorage';
 import { Subject } from 'rxjs';
 import { CheckSessionService } from 'src/app/services/check-session.service';
 import { JenisReksadanaService } from 'src/app/services/jenis-reksadana.service';
+import { environment } from 'src/environments/environment';
 import { Md5 } from 'ts-md5';
 import { ProductReksadanaService } from '../../services/product-reksadana.service';
 
@@ -17,7 +19,7 @@ import { ProductReksadanaService } from '../../services/product-reksadana.servic
   styleUrls: ['./product-reksadana.component.css']
 })
 export class ProductReksadanaComponent implements OnInit {
-
+  
   @Input() title:string="";
   @Input() subtitle:string="";
   @Input() start_date:string="";
@@ -57,22 +59,26 @@ export class ProductReksadanaComponent implements OnInit {
   password_vendor_md5:string="";
   id_reksadana:string="";
   biaya_pembelian:number=0;
+  minimum_sisa_unit:number=0;
+  biaya_penjualan:number=0;
   jenisReksadana:any={};
-  constructor(private jenisReksadanaService:JenisReksadanaService,private fb: FormBuilder, private reksadanaService:ProductReksadanaService,private router:Router, private session:SessionStorageService, private sessionService:CheckSessionService) {
-  
+  role:string="";
+  url_fund_fact:string="";
+  constructor(private http:HttpClient,private jenisReksadanaService:JenisReksadanaService,private fb: FormBuilder, private reksadanaService:ProductReksadanaService,private router:Router, private session:SessionStorageService, private sessionService:CheckSessionService) {
+    
   }
   
   ngOnInit(): void {
     this.checkSession();
     this.getJenisReksadana();
-
+    
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
       processing: true,
-     
+      
       columns:[
-  
+        
         {title:'Id Reksadana',data:'id_reksadana'},
         {title:'Nama Reksadana',data:'nama_reksadana'},
         {title:'NAB'},
@@ -89,17 +95,20 @@ export class ProductReksadanaComponent implements OnInit {
         {title:'Kinerja Satu Tahun',class:'none'},
         {title:'Id Jenis Reksadana',class:'none'},
         {title:'Nama Jenis Reksadana',class:'none'},
-        {title:'URL Vendor',class:'none'},
+        {title:'URL Prospektus',class:'none'},
+        {title:'URL Fund Fact',class:'none'},
         {title:'Password Vendor',class:'none'},
         {title:'Biaya Pembelian',class:'none'},
+        {title:'Minimum Sisa Unit',class:'none'},
+        {title:'Biaya Penjualan',class:'none'},
         {title:'Edit'},
-
+        
       ]
-    ,responsive:true
+      ,responsive:true
       
     };
     
-  
+    
     this.getProdukReksadana();
     
   }
@@ -129,22 +138,24 @@ export class ProductReksadanaComponent implements OnInit {
   }
   
   checkSession():void{
-
+    
     this.sessionService.checkSession().subscribe(response=> {
       if(response.output_schema.session.message=="SUKSES"){
+        this.role=response.output_schema.session.role;
+        this.role!="ADMIN"?this.router.navigate(['/']):null;
         this.isLogin="block";
         this.session.store("username",response.output_schema.session.username);
         this.session.store("token",response.output_schema.session.new_token);
+        
       }
       else{
         this.router.navigate(['/login'])
       }
     }, (error) => {
-  
+      
       this.router.navigate(['/login'])
     });
   }
-  
   
   toggleAdd():void{
     this.formClass='block';
@@ -156,270 +167,347 @@ export class ProductReksadanaComponent implements OnInit {
   addProdukReksadana(ngform:NgForm):void{
     
     
-    if (ngform.valid && this.biaya_pembelian!=0 && this.minimum_pembelian!=0){
-
+    if (ngform.valid  && this.biaya_pembelian>=0 && this.minimum_pembelian>=0 && this.biaya_penjualan>=0 && this.biaya_penjualan>=0 ){
+      
       console.log(this.nama_produk,this.id_jenis_reksadana,this.minimum_pembelian,this.expense_ratio,this.total_aum,this.manager_investasi,this.tingkat_resiko,this.level_resiko
         ,this.bank_kustodian,this.bank_penampung,this.url_vendor,this.password_vendor_md5,this.biaya_pembelian);
         this.level_resiko==1?this.tingkat_resiko="Rendah":this.level_resiko==2?this.tingkat_resiko="Sedang":this.tingkat_resiko="Tinggi";
         
-      this.display="hidden";
-      this.loader="flex";
-      this.formClass='hidden';
-      const md5 = new Md5();
-      var password:any=md5.appendStr(password).end().toString();
-      this.reksadanaService.addProdukReksadana(this.nama_produk,this.id_jenis_reksadana,this.minimum_pembelian,this.expense_ratio,this.total_aum,this.manager_investasi,this.tingkat_resiko,this.level_resiko
-        ,this.bank_kustodian,this.bank_penampung,this.url_vendor,password,this.biaya_pembelian).subscribe(response=>{
-        console.log(response);
-        if(response.error_schema.error_code=="BIT-00-000")
-        {
-          this.alertMessage="Berhasil Menambahkan ";
-          this.alert="block alert-success";
+        this.display="hidden";
+        this.loader="flex";
+        this.formClass='hidden';
+        const md5 = new Md5();
+        var password:any=md5.appendStr(this.password_vendor_md5).end().toString();
+        this.reksadanaService.addProdukReksadana(this.nama_produk,this.id_jenis_reksadana,this.minimum_pembelian,this.expense_ratio,this.total_aum,this.manager_investasi,this.tingkat_resiko,this.level_resiko
+          ,this.bank_kustodian,this.bank_penampung,this.url_vendor,password,this.biaya_pembelian,this.minimum_sisa_unit,this.biaya_penjualan,this.url_fund_fact).subscribe(response=>{
+            console.log(response);
+            if(response.error_schema.error_code=="BIT-00-000")
+            {
+              this.alertMessage="Berhasil Menambahkan ";
+              this.alert="block alert-success";
+              
+              
+              this.getProdukReksadana();
+            }
+            else{
+              this.alertMessage="Gagal Menambahkan";
+              this.alert="block alert-danger";
+              this.getProdukReksadana();
+            }
+            this.resetForm();
+            
+          },(err) => {
+            this.resetForm();
+            this.alertMessage="Gagal Menambahkan";
+            this.alert="block alert-danger";
+            this.getProdukReksadana();
+            
+            console.log('-----> err', err);
+          });
           
-          
-          this.getProdukReksadana();
         }
         else{
-          this.alertMessage="Gagal Menambahkan";
-          this.alert="block alert-danger";
-          this.getProdukReksadana();
+          this.addMessage=this.validationMessage();
         }
-        this.resetForm();
         
-      },(err) => {
-        this.resetForm();
-        this.alertMessage="Gagal Menambahkan";
-        this.alert="block alert-danger";
-        this.getProdukReksadana();
         
-        console.log('-----> err', err);
-      });
+      }
       
-    }
-    else{
-      this.addMessage=this.validationMessage();
-    }
-    
-    
-  }
-  
-  updateProdukReksadana(ngform:NgForm):void{
-    
-    
-    if (ngform.valid && this.biaya_pembelian!=0 && this.minimum_pembelian!=0){
-      this.display="hidden";
-      this.loader="flex";
-      this.formClass='hidden';
-      this.formUpdateClass="hidden";
-      this.level_resiko==1?this.tingkat_resiko="Rendah":this.level_resiko==2?this.tingkat_resiko="Sedang":this.tingkat_resiko="Tinggi";
-      const md5 = new Md5();
-      var password:any=md5.appendStr(password).end().toString();
-      this.reksadanaService.updateProdukReksadana(this.id_reksadana,this.nama_produk,this.id_jenis_reksadana,this.minimum_pembelian,this.expense_ratio,this.total_aum,this.manager_investasi,this.tingkat_resiko,this.level_resiko
-        ,this.bank_kustodian,this.bank_penampung,this.url_vendor,password,this.biaya_pembelian).subscribe(response=>{
-        console.log(response);
-       
-        if(response.error_schema.error_code=="BIT-00-000")
-        {
-          this.alertMessage="Berhasil Mengupdate ";
-          this.alert="block alert-success";
+      updateProdukReksadana(ngform:NgForm):void{
+        
+        
+        if (ngform.valid  && this.biaya_pembelian>=0 && this.minimum_pembelian>=0 && this.biaya_penjualan>=0 && this.biaya_penjualan>=0 ){
+          this.display="hidden";
+          this.loader="flex";
+          this.formClass='hidden';
+          this.formUpdateClass="hidden";
+          this.level_resiko==1?this.tingkat_resiko="Rendah":this.level_resiko==2?this.tingkat_resiko="Sedang":this.tingkat_resiko="Tinggi";
+          const md5 = new Md5();
+          var password:any=md5.appendStr(this.password_vendor_md5).end().toString();
+          this.reksadanaService.updateProdukReksadana(this.id_reksadana,this.nama_produk,this.id_jenis_reksadana,this.minimum_pembelian,this.expense_ratio,this.total_aum,this.manager_investasi,this.tingkat_resiko,this.level_resiko
+            ,this.bank_kustodian,this.bank_penampung,this.url_vendor,password,this.biaya_pembelian,this.minimum_sisa_unit,this.biaya_penjualan,this.url_fund_fact).subscribe(response=>{
+              console.log(response);
+              
+              if(response.error_schema.error_code=="BIT-00-000")
+              {
+                this.alertMessage="Berhasil Mengupdate ";
+                this.alert="block alert-success";
+                
+                
+                this.getProdukReksadana();
+              }
+              else{
+                this.alertMessage="Gagal Mengupdate";
+                this.alert="block alert-danger";
+                this.getProdukReksadana();
+              }
+              this.resetForm();
+              
+            },(err) => {
+              this.resetForm();
+              this.alertMessage="Gagal Mengupdate";
+              this.alert="block alert-danger";
+              this.formClass="hidden";
+              this.formUpdateClass="hidden";
+              this.getProdukReksadana();
+              console.log('-----> err', err);
+            });
+            
+          }
+          else{
+            this.addMessage=this.validationMessage();
+          }
           
           
-          this.getProdukReksadana();
         }
-        else{
-          this.alertMessage="Gagal Mengupdate";
-          this.alert="block alert-danger";
-          this.getProdukReksadana();
-        }
-        this.resetForm();
         
-      },(err) => {
-        this.resetForm();
-        this.alertMessage="Gagal Mengupdate";
-        this.alert="block alert-danger";
-        this.formClass="hidden";
-        this.formUpdateClass="hidden";
-        this.getProdukReksadana();
-        console.log('-----> err', err);
-      });
-      
-    }
-    else{
-      this.addMessage=this.validationMessage();
-    }
-    
-    
-  }
-
-
-  
-  isActive(active:string):boolean{
-    if(active=="1")
-    {
-      return true;
-    }
-    else{
-      return false;
-    }
-
-  }
-  deactivatePromoAkumulasi(kodePromo:string):void{
-
-    if(confirm("Apakah Anda yakin akan menonaktifkan produk reksadana?"))
-    {
-      this.display="hidden";
-      this.loader="flex";
-      this.formClass='hidden';
-      
-      this.reksadanaService.deactivatePromo(kodePromo).subscribe(response=>{
-        console.log(response);
-        if(response.error_schema.error_code=="BIT-00-000")
+        
+        
+        isActive(active:string):boolean{
+          if(active=="1")
+          {
+            return true;
+          }
+          else{
+            return false;
+          }
+          
+        }
+        deactivatePromoAkumulasi(kodePromo:string):void{
+          
+          if(confirm("Apakah Anda yakin akan menonaktifkan produk reksadana?"))
+          {
+            this.display="hidden";
+            this.loader="flex";
+            this.formClass='hidden';
+            
+            this.reksadanaService.deactivatePromo(kodePromo).subscribe(response=>{
+              console.log(response);
+              if(response.error_schema.error_code=="BIT-00-000")
+              {
+                this.alertMessage="Berhasil Menonaktifkan";
+                this.alert="block alert-success";
+                this.getProdukReksadana();
+              }
+              else{
+                this.alertMessage="Gagal Menonaktifkan";
+                this.alert="block alert-danger";
+                this.getProdukReksadana();
+              }
+              this.resetForm();
+              
+            },(err) => {
+              this.resetForm();
+              this.alertMessage="Gagal Menonaktifkan";
+              this.alert="block alert-danger";
+              this.getProdukReksadana();
+              console.log('-----> err', err);
+            });
+          }
+          else {
+            alert("Membatalkan Transaksi..");
+          }
+          
+          
+        }
+        
+        validationMessage():string
         {
-          this.alertMessage="Berhasil Menonaktifkan";
-          this.alert="block alert-success";
-          this.getProdukReksadana();
+          var temp="";
+          if (this.nama_produk=="")
+          {
+            temp+="Nama Produk - ";
+          }
+          
+          if (this.id_jenis_reksadana==0)
+          {
+            temp+="Id Jenis Reksadana - ";
+          }
+          if (this.manager_investasi=="")
+          {
+            temp+="Manager Investasi - ";
+          }
+          
+          if (this.tingkat_resiko=="")
+          {
+            temp+="Tingkat Resiko - ";
+            
+          }
+          if(this.level_resiko==0)
+          {
+            temp+="Level Resiko -"
+          }
+          if (this.bank_kustodian=="")
+          {
+            temp+="Bank Kustodian - ";
+            
+          }
+          if (this.bank_penampung=="")
+          {
+            temp+="Bank Penampung - ";
+            
+          }
+          if (this.url_vendor=="")
+          {
+            temp+="URL PROSPEKTUS - ";
+            
+          }
+          if (this.url_fund_fact=="")
+          {
+            temp+="URL Fund Fact - ";
+            
+          }
+          if(temp!="")
+          {
+            temp+="Tidak Boleh Kosong "
+          }
+          
+          if (this.biaya_pembelian<0 ||String(this.biaya_pembelian)=="")
+          {
+            temp+="- Biaya Pembelian - Tidak Boleh Minus ";
+            
+          }
+          if (this.biaya_penjualan<0 ||String(this.biaya_penjualan)=="")
+          {
+            temp+="- Biaya Penjualan - Tidak Boleh Minus ";
+            
+          }
+          if (this.minimum_sisa_unit<0 ||String(this.minimum_sisa_unit)=="")
+          {
+            temp+="- Minimum Sisa Unit - Tidak Boleh Minus ";
+            
+          }
+          if (this.minimum_pembelian<0 ||String(this.minimum_pembelian)=="")
+          {
+            temp+="- Minimum Pembelian - Tidak Boleh Minus ";
+            
+          }
+          return temp
         }
-        else{
-          this.alertMessage="Gagal Menonaktifkan";
-          this.alert="block alert-danger";
-          this.getProdukReksadana();
-        }
-        this.resetForm();
         
-      },(err) => {
-        this.resetForm();
-        this.alertMessage="Gagal Menonaktifkan";
-        this.alert="block alert-danger";
-        this.getProdukReksadana();
-        console.log('-----> err', err);
-      });
-    }
-    else {
-      alert("Membatalkan Transaksi..");
-    }
-     
-    
-  }
-
-  validationMessage():string
-  {
-    var temp="";
-    if (this.nama_produk=="")
-    {
-      temp+="Nama Produk - ";
-    }
-    
-    if (this.id_jenis_reksadana==0)
-    {
-      temp+="Id Jenis Reksadana - ";
-    }
-    if (this.manager_investasi=="")
-    {
-      temp+="Manager Investasi - ";
-    }
-    
-    if (this.tingkat_resiko=="")
-    {
-      temp+="Tingkat Resiko - ";
+        onSelect(selectedItem: any) {
+          console.log("Selected item : ", selectedItem);
+          
+          this.resetForm();
+          this.formUpdateClass="block";
+          this.formClass="hidden";
+          this.id_reksadana=selectedItem.id_reksadana;
+          this.nama_produk=selectedItem.nama_reksadana;
+          this.id_jenis_reksadana=selectedItem.id_jenis_reksadana;
+          this.minimum_pembelian=selectedItem.minimum_pembelian;
+          this.expense_ratio=selectedItem.expense_ratio;
+          this.total_aum=selectedItem.total_aum;
+          this.manager_investasi=selectedItem.manager_investasi;
+          this.tingkat_resiko=selectedItem.tingkat_resiko;
+          this.level_resiko=selectedItem.level_resiko;
+          this.bank_kustodian=selectedItem.bank_kustodian;
+          this.bank_penampung=selectedItem.bank_penampung;
+          this.url_vendor=selectedItem.url_vendor;
+          this.password_vendor_md5="";
+          this.biaya_pembelian=selectedItem.biaya_pembelian;
+          this.minimum_sisa_unit=selectedItem.minimum_sisa_unit;
+          this.biaya_penjualan=selectedItem.biaya_penjualan;
+          this.url_fund_fact=selectedItem.url_fund_fact;
+          window.scroll(0,0);
+          
+        }
+        
+        resetForm():void
+        {
+          this.nama_produk="";
+          this.id_jenis_reksadana=0;
+          this.minimum_pembelian=0;
+          this.expense_ratio=0;
+          this.total_aum=0;
+          this.manager_investasi="";
+          this.tingkat_resiko="";
+          this.level_resiko=0;
+          this.bank_kustodian="";
+          this.bank_penampung="";
+          this.url_vendor="";
+          this.password_vendor_md5="";
+          this.biaya_pembelian=0;
+          this.minimum_sisa_unit=0;
+          this.url_fund_fact="";
+        }
+        
+        validateDate(produkReksadana:any):boolean{
+          var parts=produkReksadana.start_date.split('-');
+          var sf = new Date(parts[2], parts[1] - 1, parts[0]); 
+          if(sf<new Date())
+          {
+            return false;
+          }
+          else{
+            
+            return true;
+          }
+        }
+        
+        
+        getJenisReksadana():void{
+          
+          this.jenisReksadanaService.getJenisReksadana().subscribe((response:any)=>{
+            this.jenisReksadana=response.output_schema;
+            
+          }, (err:any) => {
+            console.log('-----> err', err);
+          });
+        }
+        
+        
+        uploadPropektus(event:any) {
+          let fileList: FileList = event.target.files;
+          if(fileList.length > 0) {
+            let file: File = fileList[0];
+            let formData:FormData = new FormData();
+            formData.append('file', file, file.name);
+            let headers = new HttpHeaders({
+             
+              'Access-Control-Allow-Headers': 'Content-Type',
+              'Access-Control-Allow-Methods': 'POST, OPTIONS, GET, PUT',
+              'Access-Control-Allow-Origin': '*',
+              'Identity':'ead9c8c86bab17493373b8bf4434c8ca',
+              'Enctype':'multipart/form-data',
+              'Accept':'application/json'
+          
+            });
+            /** In Angular 5, including the header Content-Type can invalidate your request */
+           // headers.append('Content-Type', 'multipart/form-data');
+            this.http.post(environment.uploadProspektusUrl, formData, {headers:headers}).subscribe(
+            (response:any)=>{
+              this.url_vendor=response.output_schema.file_name
+              
+            }
+            )
+            
+          }
+        }
+        uploadFundFact(event:any) {
+          let fileList: FileList = event.target.files;
+          if(fileList.length > 0) {
+            let file: File = fileList[0];
+            let formData:FormData = new FormData();
+            formData.append('file', file, file.name);
+            let headers = new HttpHeaders({
+             
+              'Access-Control-Allow-Headers': 'Content-Type',
+              'Access-Control-Allow-Methods': 'POST, OPTIONS, GET, PUT',
+              'Access-Control-Allow-Origin': '*',
+              'Identity':'ead9c8c86bab17493373b8bf4434c8ca',
+              'Enctype':'multipart/form-data',
+              'Accept':'application/json'
+          
+            });
+            /** In Angular 5, including the header Content-Type can invalidate your request */
+           // headers.append('Content-Type', 'multipart/form-data');
+            this.http.post(environment.uploadfundFactUrl, formData, {headers:headers}).subscribe(
+            (response:any)=>{
+              this.url_fund_fact=response.output_schema.file_name
+            }
+            )
+            
+          }
+        }
+      }
       
-    }
-    if(this.level_resiko==0)
-    {
-      temp+="Level Resiko -"
-    }
-    if (this.bank_kustodian=="")
-    {
-      temp+="Bank Kustodian - ";
-      
-    }
-    if (this.bank_penampung=="")
-    {
-      temp+="Bank Penampung - ";
-      
-    }
-    if (this.url_vendor=="")
-    {
-      temp+="Bank Kustodian - ";
-      
-    }
-    if (this.password_vendor_md5=="")
-    {
-      temp+="Bank Kustodian - ";
-      
-    }
-    if (this.biaya_pembelian==0 ||String(this.biaya_pembelian)=="")
-    {
-      temp+="Biaya Pembelian - ";
-      
-    }
-    if(temp!="")
-    {
-      temp+="Tidak Boleh Kosong"
-    }
-    return temp
-  }
-
-  onSelect(selectedItem: any) {
-    console.log("Selected item : ", selectedItem);
-
-    this.resetForm();
-    this.formUpdateClass="block";
-    this.formClass="hidden";
-    this.id_reksadana=selectedItem.id_reksadana;
-    this.nama_produk=selectedItem.nama_reksadana;
-    this.id_jenis_reksadana=selectedItem.id_jenis_reksadana;
-    this.minimum_pembelian=selectedItem.minimum_pembelian;
-    this.expense_ratio=selectedItem.expense_ratio;
-    this.total_aum=selectedItem.total_aum;
-    this.manager_investasi=selectedItem.manager_investasi;
-    this.tingkat_resiko=selectedItem.tingkat_resiko;
-    this.level_resiko=selectedItem.level_resiko;
-    this.bank_kustodian=selectedItem.bank_kustodian;
-    this.bank_penampung=selectedItem.bank_penampung;
-    this.url_vendor=selectedItem.url_vendor;
-    this.password_vendor_md5=selectedItem.password_vendor_md5;
-    this.biaya_pembelian=selectedItem.biaya_pembelian;
-    window.scroll(0,0);
-    
-  }
-  
-  resetForm():void
-  {
-  this.nama_produk="";
-  this.id_jenis_reksadana=0;
-  this.minimum_pembelian=0;
-  this.expense_ratio=0;
-  this.total_aum=0;
-  this.manager_investasi="";
-  this.tingkat_resiko="";
-  this.level_resiko=0;
-  this.bank_kustodian="";
-  this.bank_penampung="";
-  this.url_vendor="";
-  this.password_vendor_md5="";
-  this.biaya_pembelian=0;
-  }
-
-  validateDate(produkReksadana:any):boolean{
-    var parts=produkReksadana.start_date.split('-');
-    var sf = new Date(parts[2], parts[1] - 1, parts[0]); 
-    if(sf<new Date())
-    {
-      return false;
-    }
-    else{
-
-      return true;
-    }
-  }
-
-
-  getJenisReksadana():void{
-    
-    this.jenisReksadanaService.getJenisReksadana().subscribe((response:any)=>{
-      this.jenisReksadana=response.output_schema;
-      
-    }, (err:any) => {
-      console.log('-----> err', err);
-    });
-  }
-}

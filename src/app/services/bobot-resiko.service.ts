@@ -3,40 +3,34 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { environment } from 'src/environments/environment';
-const httpOptions={
-  headers:new HttpHeaders({
-    'Content-Type':'application/json',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS, GET, PUT',
-    'Access-Control-Allow-Origin': '*',
-    'Identity':'ERICIMPOSTORNYA'
-    
-  })
-}
+import { CheckSessionService } from './check-session.service';
+
 @Injectable({
   providedIn: 'root'
 })
 export class BobotResikoService {
-  
-  constructor(private http:HttpClient) {
-    
+  httpOptions:any;
+  constructor(private http:HttpClient,private sessionService:CheckSessionService) {
+   this.httpOptions=sessionService.getHeader();
   }
   
   getBobotResiko():Observable<any>{
+    this.httpOptions=this.sessionService.getHeader();
     const url=environment.bobotResikoUrl;     
-    return this.http.get(url,httpOptions);
+    return this.http.get(url,this.httpOptions);
   }
   
   addBobotResiko(namaJenis:string):Observable<any>{
+    this.httpOptions=this.sessionService.getHeader();
     const url=environment.bobotResikoUrl;
     const body={
       'nama_jenis_reksadana':namaJenis
     }
-    return this.http.post(url,body,httpOptions);
+    return this.http.post(url,body,this.httpOptions);
   }
   
   updateBobotResiko(bobotResiko:string,persentase:any,id_jenis_reksadana:any):Observable<any>{
-    
+    this.httpOptions=this.sessionService.getHeader();
     var temp=[];
     for(var i=0;i<persentase.length;i++)
     {
@@ -52,13 +46,15 @@ export class BobotResikoService {
       "input" : temp
     };
     console.log(body);
-    return this.http.put(url,body,httpOptions);
+    return this.http.put(url,body,this.httpOptions);
   }
   
   deactivatePromo(kode_promo:string):Observable<any>{
+    this.httpOptions=this.sessionService.getHeader();
     console.log(kode_promo);
     const url=environment.deletePromoUrl+'/'+kode_promo;
     console.log(url);
-    return this.http.delete(url,httpOptions);
+    return this.http.delete(url,this.httpOptions);
   }
+
 }

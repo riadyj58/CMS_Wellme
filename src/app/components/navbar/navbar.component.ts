@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SessionStorageService } from 'ngx-webstorage';
 import { LogoutService } from 'src/app/services/logout.service';
@@ -10,6 +10,7 @@ import { LogoutService } from 'src/app/services/logout.service';
 })
 export class NavbarComponent implements OnInit {
 
+  @Input() role:string="";
   constructor(private logoutService:LogoutService,private router:Router, private session:SessionStorageService) { }
 
   ngOnInit(): void {
@@ -24,6 +25,9 @@ export class NavbarComponent implements OnInit {
           this.session.clear("token");
           this.router.navigate(['/login']);
       })
+  }
+  setRole(role:string):void{
+    this.role=role;
   }
 
   

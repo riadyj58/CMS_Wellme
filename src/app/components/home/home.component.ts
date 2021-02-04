@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { SessionStorageService } from 'ngx-webstorage';
 import { CheckSessionService } from 'src/app/services/check-session.service';
 import { DashboardService } from 'src/app/services/dashboard.service';
+import { Output, EventEmitter } from '@angular/core';
 declare var jQuery: any;
 declare var Chartist:any;
 @Component({
@@ -16,6 +17,7 @@ export class HomeComponent implements OnInit {
   @Input() start_date:string|null;
   @Input() end_date:string|null;
   @Input() chart_type:string='daily';
+  role:string="";
   xAxis:any=[];
   yAxisPembelian:any=[];
   yAxisPenjualan:any=[];
@@ -52,9 +54,12 @@ export class HomeComponent implements OnInit {
 
     this.sessionService.checkSession().subscribe(response=> {
       if(response.output_schema.session.message=="SUKSES"){
+        this.role=response.output_schema.session.role;
+        
         this.isLogin="block";
         this.session.store("username",response.output_schema.session.username);
         this.session.store("token",response.output_schema.session.new_token);
+      
       }
       else{
         this.router.navigate(['/login'])
@@ -166,7 +171,7 @@ penjualanPeriodeSebelumnya=penjualanPeriodeSebelumnya==undefined||penjualanPerio
 
 this.percentage_total_penjualan = (-(penjualanPeriodeSebelumnya/(this.total_penjualan==0?1:this.total_penjualan))+1)*100;
 this.percentage_total_penjualan>=0?this.iconTotalPenjualan="fa fa-caret-up text-success":this.iconTotalPenjualan="fa fa-caret-down text-danger";
-
+this.percentage_total_penjualan=Math.round(this.percentage_total_penjualan * 100) / 100
 
 this.total_asset=lastItemPembelian-lastItemPenjualan;
 this.total_asset_periode_sebelumnya=penjualanPeriodeSebelumnya-transaksiJualPeriodeSebelumnya;
@@ -177,7 +182,7 @@ transaksiJualPeriodeSebelumnya=transaksiJualPeriodeSebelumnya==undefined||transa
 this.percentage_total_asset = ((this.total_asset-this.total_asset_periode_sebelumnya)/this.total_asset)*100;
 
 this.percentage_total_asset>=0?this.iconTotalAsset="fa fa-caret-up text-success":this.iconTotalAsset="fa fa-caret-down text-danger";
-
+this.percentage_total_asset=Math.round(this.percentage_total_asset * 100) / 100
   }
 
   renderPromoChart():void{

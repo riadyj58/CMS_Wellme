@@ -3,41 +3,38 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { environment } from 'src/environments/environment';
+import { CheckSessionService } from './check-session.service';
 
-const httpOptions={
-  headers:new HttpHeaders({
-    'Content-Type':'application/json',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS, GET, PUT',
-    'Access-Control-Allow-Origin': '*',
-    'Identity':'ERICIMPOSTORNYA'
 
-  })
-}
 
 @Injectable({
   providedIn: 'root'
 })
 export class HistoriTransaksiService {
-  constructor(private http:HttpClient) {
-   
+  httpOptions:any;
+  constructor(private http:HttpClient,private sessionService:CheckSessionService) {
+    this.httpOptions=this.sessionService.getHeader();
   }
    
   getHistoriPembelian():Observable<any>{
+    this.httpOptions=this.sessionService.getHeader();
     const url=environment.historiPembelianUrl;   
-    return this.http.get(url,httpOptions);
+    return this.http.get(url,this.httpOptions);
   }
   getHistoriPenjualan():Observable<any>{
+    this.httpOptions=this.sessionService.getHeader();
     const url=environment.historiPenjualanUrl;   
-    return this.http.get(url,httpOptions);
+    return this.http.get(url,this.httpOptions);
   }
   getHistoriPembelianNasabah(bcaId:string):Observable<any>{
+    this.httpOptions=this.sessionService.getHeader();
     const url=environment.historiPembelianUrl+'/'+bcaId;   
-    return this.http.get(url,httpOptions);
+    return this.http.get(url,this.httpOptions);
   }
   getHistoriPenjualanNasabah(bcaId:string):Observable<any>{
+    this.httpOptions=this.sessionService.getHeader();
     const url=environment.historiPenjualanUrl+'/'+bcaId;   
-    return this.http.get(url,httpOptions);
+    return this.http.get(url,this.httpOptions);
   }
 
 }

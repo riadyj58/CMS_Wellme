@@ -1,13 +1,13 @@
 	<!-- WRAPPER -->
 	<div id="wrapper" [ngClass]="isLogin">
-		<app-navbar></app-navbar>
+		<app-navbar [role]="role"></app-navbar>
 		<!-- MAIN -->
 		<div class="main">
 			<!-- MAIN CONTENT -->
 			<div class="main-content">
 				<div class="container-fluid">
 					<!-- OVERVIEW -->
-					<div class="panel panel-headline">
+					<div class="panel panel-headline" *ngIf="role=='ADMIN'">
 						
 						<div style="display: flex; justify-content: center;height: 300px; align-items: center;" [ngClass]="loader" >
 							<div class="loader-overview"></div>

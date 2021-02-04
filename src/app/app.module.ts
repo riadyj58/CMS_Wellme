@@ -21,7 +21,9 @@ import { HistoriPenjualanNasabahComponent } from './components/histori-penjualan
 import { HistoriPembelianNasabahComponent } from './components/histori-pembelian-nasabah/histori-pembelian-nasabah.component';
 import { InputNABComponent } from './components/input-nab/input-nab.component';
 import { BobotResikoComponent } from './components/bobot-resiko/bobot-resiko.component';
+import { RouterModule } from '@angular/router';
 @NgModule({
+
   declarations: [
     AppComponent,
     LoginComponent,
@@ -46,7 +48,8 @@ import { BobotResikoComponent } from './components/bobot-resiko/bobot-resiko.com
     FormsModule,
     DataTablesModule,
     NgxWebstorageModule.forRoot(),
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterModule
   ],
   providers: [],
   bootstrap: [AppComponent]

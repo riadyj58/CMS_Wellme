@@ -1,10 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, NgModule, OnInit } from '@angular/core';
 import { LoginServicesService } from 'src/app/services/login-services.service';
 import { SessionStorageService} from 'ngx-webstorage';
 import { Router } from '@angular/router';
 import { RouterModule, Routes } from '@angular/router';
 import { CheckSessionService } from 'src/app/services/check-session.service';
-
+import { NgForm } from '@angular/forms';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -29,7 +29,10 @@ export class LoginComponent implements OnInit {
     };
   }
 
-  onSubmit(){
+  onSubmit(ngForm:NgForm){
+    if(ngForm.valid){
+
+    this.message="";
     this.loader={
       'display':'block'
     }
@@ -53,7 +56,12 @@ export class LoginComponent implements OnInit {
      else{
       this.message=response.output_schema.detail_login.message;
      }
-    })
+     
+    });
+  }
+  else{
+    this.message="USERNAME ATAU PASSWORD TIDAK BOLEH KOSONG";
+  }
   }
   ngOnInit(): void {
     this.checkSession();

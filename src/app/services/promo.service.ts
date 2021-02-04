@@ -3,27 +3,19 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { environment } from 'src/environments/environment';
-const httpOptions={
-  headers:new HttpHeaders({
-    'Content-Type':'application/json',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS, GET, PUT',
-    'Access-Control-Allow-Origin': '*',
-    'Identity':'ERICIMPOSTORNYA'
-
-  })
-}
+import { CheckSessionService } from './check-session.service';
 @Injectable({
   providedIn: 'root'
 })
 
 export class PromoService {
-  
-  constructor(private http:HttpClient) {
-   
+  httpOptions:any;
+  constructor(private http:HttpClient ,private sessionService:CheckSessionService) {
+    this.httpOptions=this.sessionService.getHeader();
   }
    
    getPromoAkumulasi():Observable<any>{
+    this.httpOptions=this.sessionService.getHeader();
      const url=environment.promoAkumulasiUrl;
      console.log(url);
      const request={
@@ -31,9 +23,10 @@ export class PromoService {
 
     
      
-     return this.http.get(url,httpOptions);
+     return this.http.get(url,this.httpOptions);
    }
    addPromoAkumulasi(title:string,subtitle:string,start_date:string,end_date:string,description:string,cashback:number,target_akumulasi:number):Observable<any>{
+    this.httpOptions=this.sessionService.getHeader();
     const url=environment.addAkumulasi;
     var start_date_formatted = new DatePipe('en-US').transform(start_date, 'dd-MM-yyyy');
     var end_date_formatted = new DatePipe('en-US').transform(end_date, 'dd-MM-yyyy');
@@ -49,10 +42,11 @@ export class PromoService {
     }
    console.log(body);
     
-    return this.http.post(url,body,httpOptions);
+    return this.http.post(url,body,this.httpOptions);
   }
 
   updatePromoAkumulasi(kode_promo:string,title:string,subtitle:string,start_date:string,end_date:string,description:string,cashback:number,target_akumulasi:number):Observable<any>{
+    this.httpOptions=this.sessionService.getHeader();
     const url=environment.addAkumulasi+'/'+kode_promo;
     var start_date_formatted = new DatePipe('en-US').transform(start_date, 'dd-MM-yyyy');
     var end_date_formatted = new DatePipe('en-US').transform(end_date, 'dd-MM-yyyy');
@@ -68,11 +62,12 @@ export class PromoService {
     }
    console.log(body);
     
-    return this.http.put(url,body,httpOptions);
+    return this.http.put(url,body,this.httpOptions);
   }
 
 
   getPromoKode():Observable<any>{
+    this.httpOptions=this.sessionService.getHeader();
     const url=environment.promoKodeUrl;
     console.log(url);
     const request={
@@ -80,9 +75,10 @@ export class PromoService {
 
    
     
-    return this.http.get(url,httpOptions);
+    return this.http.get(url,this.httpOptions);
   }
   addPromoKode(kodePromo:string,title:string,subtitle:string,start_date:string,end_date:string,description:string,cashback:number,minimum_transaksi:number):Observable<any>{
+    this.httpOptions=this.sessionService.getHeader();
    const url=environment.addKode;
    var start_date_formatted = new DatePipe('en-US').transform(start_date, 'dd-MM-yyyy');
    var end_date_formatted = new DatePipe('en-US').transform(end_date, 'dd-MM-yyyy');
@@ -99,10 +95,11 @@ export class PromoService {
    }
   console.log(body);
    
-   return this.http.post(url,body,httpOptions);
+   return this.http.post(url,body,this.httpOptions);
  }
 
  updatePromoKode(kode_promo:string,title:string,subtitle:string,start_date:string,end_date:string,description:string,cashback:number,minimum_transaksi:number):Observable<any>{
+  this.httpOptions=this.sessionService.getHeader();
    const url=environment.addKode+'/'+kode_promo;
    var start_date_formatted = new DatePipe('en-US').transform(start_date, 'dd-MM-yyyy');
    var end_date_formatted = new DatePipe('en-US').transform(end_date, 'dd-MM-yyyy');
@@ -118,14 +115,15 @@ export class PromoService {
   }
   console.log(body);
    
-   return this.http.put(url,body,httpOptions);
+   return this.http.put(url,body,this.httpOptions);
  }
 
 
   deactivatePromo(kode_promo:string):Observable<any>{
+    this.httpOptions=this.sessionService.getHeader();
     console.log(kode_promo);
     const url=environment.deletePromoUrl+'/'+kode_promo;
     console.log(url);
-    return this.http.delete(url,httpOptions);
+    return this.http.delete(url,this.httpOptions);
   }
 }

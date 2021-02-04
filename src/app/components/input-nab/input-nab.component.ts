@@ -40,6 +40,7 @@ export class InputNABComponent implements OnInit {
   idProduk:number=0;
   nab:number=0;
   namaProduk:string="";
+  role:string="";
   constructor(private dailyNabService:InputNABService,private fb: FormBuilder,private jenisReksadanaService:JenisReksadanaService,private router:Router, private session:SessionStorageService, private sessionService:CheckSessionService) {
   
   }
@@ -114,9 +115,12 @@ export class InputNABComponent implements OnInit {
 
     this.sessionService.checkSession().subscribe(response=> {
       if(response.output_schema.session.message=="SUKSES"){
+        this.role=response.output_schema.session.role;
+        this.role!="ADMIN"?this.router.navigate(['/']):null;
         this.isLogin="block";
         this.session.store("username",response.output_schema.session.username);
         this.session.store("token",response.output_schema.session.new_token);
+      
       }
       else{
         this.router.navigate(['/login'])

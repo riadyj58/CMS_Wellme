@@ -8,6 +8,7 @@ import { Subject } from 'rxjs';
 import { CheckSessionService } from 'src/app/services/check-session.service';
 import { JenisReksadanaService } from 'src/app/services/jenis-reksadana.service';
 
+
 @Component({
   selector: 'app-jenis-reksadana',
   templateUrl: './jenis-reksadana.component.html',
@@ -19,7 +20,7 @@ export class JenisReksadanaComponent implements OnInit {
   submitFormMessage:string="";
   display:string='hidden';
   loader:string="flex";
-
+  role:string="";
   jenisReksadana:any=[];
   tab:string=``;
   formClass:string='hidden';
@@ -80,9 +81,12 @@ export class JenisReksadanaComponent implements OnInit {
 
     this.sessionService.checkSession().subscribe(response=> {
       if(response.output_schema.session.message=="SUKSES"){
+        this.role=response.output_schema.session.role;
+        this.role!="ADMIN"?this.router.navigate(['/']):null;
         this.isLogin="block";
         this.session.store("username",response.output_schema.session.username);
         this.session.store("token",response.output_schema.session.new_token);
+      
       }
       else{
         this.router.navigate(['/login'])
