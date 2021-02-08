@@ -64,9 +64,9 @@
                             {{jenisReksadana.nama_jenis}}
                           </option>
                         </select><br>
-                        Minimum Pembelian: <input type="number"  min="0" class="form-control" style="width: 50%" name="minimum_pembelian" [(ngModel)]="minimum_pembelian" required><br>
-                        Expense Ratio: <input type="number"  min="0" class="form-control" style="width: 50%" name="expense_ratio" [(ngModel)]="expense_ratio" required><br>
-                        Total Aum:<input type="number" min="0" class="form-control" style="width: 50%" name="total_aum" [(ngModel)]="total_aum" required> <br>
+                        Minimum Pembelian: <input type="number"  [min]="0" class="form-control" style="width: 50%" name="minimum_pembelian" [(ngModel)]="minimum_pembelian" required><br>
+                        Expense Ratio: <input type="number"  [min]="0" class="form-control" style="width: 50%" name="expense_ratio" [(ngModel)]="expense_ratio" required><br>
+                        Total Aum:<input type="number" [min]="0" class="form-control" style="width: 50%" name="total_aum" [(ngModel)]="total_aum" required> <br>
                         Manager Investasi:<input type="text" name="manager_investasi" class="form-control" style="width: 50%" required  [(ngModel)]="manager_investasi"/><br>
                         Tingkat Resiko:<select  name="level_resiko" style="width: 50%" class="form-control" required [(ngModel)]="level_resiko">
                           <option value="1">Rendah</option>
@@ -76,16 +76,16 @@
                         Bank Kustodian :<input type="text"  name="bank_kustodian" class="form-control" style="width: 50%"[(ngModel)]="bank_kustodian" required ><br>
                         Bank Penampung: <input type="text" class="form-control" style="width: 50%" name="bank_penampung" [(ngModel)]="bank_penampung" required><br>
                         Password Vendor:<input type="password" class="form-control" style="width: 50%" name="password_vendor_md5" [(ngModel)]="password_vendor_md5" ><br>
-                        Biaya Pembelian:<input type="number" min="1" name="biaya_pembelian" class="form-control" style="width: 50%" required  [(ngModel)]="biaya_pembelian"/><br>
-                        Minimum Sisa Unit:<input type="number" min="1" name="minimum_sisa_unit" class="form-control" style="width: 50%" required  [(ngModel)]="minimum_sisa_unit"/><br>
-                        Biaya Penjualan :<input type="number" min="1" name="biaya_penjualan" class="form-control" style="width: 50%" required  [(ngModel)]="biaya_penjualan"/><br>
+                        Biaya Pembelian:<input type="number" [min]="0" name="biaya_pembelian" class="form-control" style="width: 50%" required  [(ngModel)]="biaya_pembelian"/><br>
+                        Minimum Sisa Unit:<input type="number" [min]="0" name="minimum_sisa_unit" class="form-control" style="width: 50%" required  [(ngModel)]="minimum_sisa_unit"/><br>
+                        Biaya Penjualan :<input type="number" [min]="0" name="biaya_penjualan" class="form-control" style="width: 50%" required  [(ngModel)]="biaya_penjualan"/><br>
                         Prospektus:<input type="file" class="form-control" (change)="uploadPropektus($event)" style="width: 50%;" placeholder="Upload file" accept="*">
                         URL Prospektus: <input type="text" [disabled]="true" class="form-control" style="width: 50%" name="url_vendor" [(ngModel)]="url_vendor" required><br>
                         Prospektus:<input type="file" class="form-control" (change)="uploadFundFact($event)" style="width: 50%;" placeholder="Upload file" accept="*">
                         URL Fund Fact: <input type="text" [disabled]="true" class="form-control" style="width: 50%" name="url_fund_fact" [(ngModel)]="url_fund_fact" required><br>
                         <div style=" margin-bottom: 10px;"><span style="color: red;">{{addMessage}}</span></div>
                        
-                        <tr><td><input type="submit" [disabled]="!add.valid" name="submit" class="btn btn-primary"></td></tr>
+                        <tr><td><input type="submit" name="submit" class="btn btn-primary"></td></tr>
                     </form>
                 
                   </div>

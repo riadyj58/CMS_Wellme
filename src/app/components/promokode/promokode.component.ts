@@ -124,6 +124,7 @@ export class PromokodeComponent implements OnInit {
     
     
     if (ngform.valid && (new Date(this.start_date)<new Date(this.end_date))){
+      if(confirm("Apakah Anda yakin akan Menambahkan Promo Transaksi?")){
       this.display="hidden";
       this.loader="flex";
       this.formClass='hidden';
@@ -152,7 +153,9 @@ export class PromokodeComponent implements OnInit {
         this.getPromoKode();
         console.log('-----> err', err);
       });
-      
+    }else{
+      alert("Membatalkan Transaksi...");
+    }
     }
     else{
       this.addPromoMessage=this.validationMessage();
@@ -165,6 +168,7 @@ export class PromokodeComponent implements OnInit {
     
     
     if (ngform.valid && (new Date(this.start_date)<new Date(this.end_date))){
+      if(confirm("Apakah Anda yakin akan Mengubah Promo Transaksi?")){
       this.display="hidden";
       this.loader="flex";
       this.formClass='hidden';
@@ -198,7 +202,9 @@ export class PromokodeComponent implements OnInit {
         this.getPromoKode();
         console.log('-----> err', err);
       });
-      
+    }else{
+      alert("Membatalkan Transaksi...");
+    }
     }
     else{
       this.addPromoMessage=this.validationMessage();
@@ -282,7 +288,11 @@ export class PromokodeComponent implements OnInit {
     {
       temp+="Cashback - ";
     }
-    
+    if (this.description=="")
+    {
+      temp+="Deskripsi - ";
+      
+    }
     if (this.minimum_transaksi==0)
     {
       temp+="Target kode - ";

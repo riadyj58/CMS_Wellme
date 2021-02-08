@@ -38,6 +38,7 @@ columnTableBobotResiko :any=[];
   namaJenis:string;
   columnIdBobotResiko:any=[];
   bobotResikoNumber:string="";
+  valid:boolean=true;
   @Input() role:string="";
   constructor(private fb: FormBuilder,private bobotResikoService:BobotResikoService,private router:Router, private session:SessionStorageService, private sessionService:CheckSessionService) {
   
@@ -115,7 +116,16 @@ columnTableBobotResiko :any=[];
   
   updateBobotResiko(ngform:NgForm):void{
 
-    if (ngform.valid && this.bobotResikoArray.reduce((a:any, b:any) => a + b, 0)==100){
+    for (let i = 0; i < this.bobotResikoArray.length; i++) {
+      
+      if(this.bobotResikoArray[i]<0)
+      {
+        this.valid=false;
+      }
+      
+    }
+    if (ngform.valid && this.bobotResikoArray.reduce((a:any, b:any) => a + b, 0)==100 && this.valid==true){
+      if(confirm("Apakah Anda yakin akan mengupdate bobot resiko?")){
       this.display="hidden";
       this.loader="flex";
       this.formClass='hidden';
@@ -142,12 +152,16 @@ columnTableBobotResiko :any=[];
         this.getBobotResiko();
         console.log('-----> err', err);
       });
-      
+    }
+    else{
+      alert("Membatalkan Transaksi...");
+    }
     }
     else{
       this.submitFormMessage=this.validationMessage();
     }
-    
+  
+ 
     
     
   }
@@ -159,10 +173,17 @@ columnTableBobotResiko :any=[];
     var temp="";
     if (this.bobotResikoArray.reduce((a:any, b:any) => a + b, 0)!=100){
       temp+="Jumlah Persentase Tidak 100";
-    } else 
+    }
+    else if(this.valid==false)
+    {
+      temp+="Presentase Tidak Boleh Ada Yang Minus (-) Atau Kosong"
+    }
+    else 
     {
       temp+="Kolom Tidak Bole Ada yang Kosong"; 
     }
+
+
     return temp
   }
 

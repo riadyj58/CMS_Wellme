@@ -33,11 +33,11 @@ export class JenisReksadanaComponent implements OnInit {
   alertMessage:string="";
   alertClass:string="";
   formUpdateClass:string="hidden";
-
+  
   idJenis:string;
   namaJenis:string;
   constructor(private fb: FormBuilder,private jenisReksadanaService:JenisReksadanaService,private router:Router, private session:SessionStorageService, private sessionService:CheckSessionService) {
-  
+    
   }
   
   ngOnInit(): void {
@@ -78,7 +78,7 @@ export class JenisReksadanaComponent implements OnInit {
   }
   
   checkSession():void{
-
+    
     this.sessionService.checkSession().subscribe(response=> {
       if(response.output_schema.session.message=="SUKSES"){
         this.role=response.output_schema.session.role;
@@ -86,13 +86,13 @@ export class JenisReksadanaComponent implements OnInit {
         this.isLogin="block";
         this.session.store("username",response.output_schema.session.username);
         this.session.store("token",response.output_schema.session.new_token);
-      
+        
       }
       else{
         this.router.navigate(['/login'])
       }
     }, (error) => {
-  
+      
       this.router.navigate(['/login'])
     });
   }
@@ -109,37 +109,40 @@ export class JenisReksadanaComponent implements OnInit {
     
     
     if (ngform.valid){
-      this.display="hidden";
-      this.loader="flex";
-      this.formClass='hidden';
-      
-      this.jenisReksadanaService.addJenisReksadana(this.namaJenis).subscribe(response=>{
-        console.log(response);
-        if(response.error_schema.error_code=="BIT-00-000")
-        {
-          this.alertMessage="Berhasil Menambahkan ";
-          this.alert="block alert-success";
+      if(confirm("Apakah Anda yakin akan Menambahkan Jenis Reksadana?")){
+        this.display="hidden";
+        this.loader="flex";
+        this.formClass='hidden';
+        
+        this.jenisReksadanaService.addJenisReksadana(this.namaJenis).subscribe(response=>{
+          console.log(response);
+          if(response.error_schema.error_code=="BIT-00-000")
+          {
+            this.alertMessage="Berhasil Menambahkan ";
+            this.alert="block alert-success";
+            
+            
+            this.getJenisReksadana();
+          }
+          else{
+            this.alertMessage="Gagal Menambahkan";
+            this.alert="block alert-danger";
+            this.getJenisReksadana();
+          }
+          this.resetForm();
           
-          
-          this.getJenisReksadana();
-        }
-        else{
+        },(err:any) => {
+          this.resetForm();
           this.alertMessage="Gagal Menambahkan";
           this.alert="block alert-danger";
+          this.formClass="hidden";
+          this.formUpdateClass="hidden";
           this.getJenisReksadana();
-        }
-        this.resetForm();
-        
-      },(err:any) => {
-        this.resetForm();
-        this.alertMessage="Gagal Menambahkan";
-        this.alert="block alert-danger";
-        this.formClass="hidden";
-        this.formUpdateClass="hidden";
-        this.getJenisReksadana();
-        console.log('-----> err', err);
-      });
-      
+          console.log('-----> err', err);
+        });
+      }else{
+        alert("Membatalkan Transaksi...");
+      }
     }
     else{
       this.submitFormMessage=this.validationMessage();
@@ -152,33 +155,37 @@ export class JenisReksadanaComponent implements OnInit {
     
     
     if (ngform.valid){
-      this.display="hidden";
-      this.loader="flex";
-      this.formClass='hidden';
-      
-      this.jenisReksadanaService.updateJenisReksadana(this.idJenis,this.namaJenis).subscribe(response=>{
-        if(response.error_schema.error_code=="BIT-00-000")
-        {
-          this.alertMessage="Berhasil Mengubah ";
-          this.alert="block alert-success";
-          this.getJenisReksadana();
-        }
-        else{
+      if(confirm("Apakah Anda yakin akan Mengubah Jenis Reksadana?")){
+        this.display="hidden";
+        this.loader="flex";
+        this.formClass='hidden';
+        
+        this.jenisReksadanaService.updateJenisReksadana(this.idJenis,this.namaJenis).subscribe(response=>{
+          if(response.error_schema.error_code=="BIT-00-000")
+          {
+            this.alertMessage="Berhasil Mengubah ";
+            this.alert="block alert-success";
+            this.getJenisReksadana();
+          }
+          else{
+            this.alertMessage="Gagal Mengubah";
+            this.alert="block alert-danger";
+            this.getJenisReksadana();
+          }
+          this.resetForm();
+        },(err:any) => {
+          this.resetForm();
           this.alertMessage="Gagal Mengubah";
           this.alert="block alert-danger";
+          this.formClass="hidden";
+          this.formUpdateClass="hidden";
           this.getJenisReksadana();
-        }
-        this.resetForm();
-      },(err:any) => {
-        this.resetForm();
-        this.alertMessage="Gagal Mengubah";
-        this.alert="block alert-danger";
-        this.formClass="hidden";
-        this.formUpdateClass="hidden";
-        this.getJenisReksadana();
-        console.log('-----> err', err);
-      });
-      
+          console.log('-----> err', err);
+        });
+      }
+      else{
+        alert("Membatalkan Transaksi");
+      }
     }
     else{
       this.submitFormMessage=this.validationMessage();
@@ -187,8 +194,8 @@ export class JenisReksadanaComponent implements OnInit {
     
     
   }
-
-
+  
+  
   validationMessage():string
   {
     
@@ -201,9 +208,9 @@ export class JenisReksadanaComponent implements OnInit {
     }
     return temp
   }
-
-  onSelect(selectedItem: any) {
   
+  onSelect(selectedItem: any) {
+    
     this.resetForm();
     this.formUpdateClass="block";
     this.formClass="hidden";
@@ -216,6 +223,6 @@ export class JenisReksadanaComponent implements OnInit {
   {
     this.idJenis="";
     this.namaJenis="";
-     }
-
+  }
+  
 }

@@ -167,8 +167,9 @@ export class ProductReksadanaComponent implements OnInit {
   addProdukReksadana(ngform:NgForm):void{
     
     
-    if (ngform.valid  && this.biaya_pembelian>=0 && this.minimum_pembelian>=0 && this.biaya_penjualan>=0 && this.biaya_penjualan>=0 ){
-      
+    if (ngform.valid  && this.biaya_pembelian>=0 && this.total_aum>=0 && this.minimum_pembelian>=0 && this.biaya_penjualan>=0 && this.biaya_penjualan>=0 && this.url_fund_fact!="" && this.url_vendor!=""){
+      if(confirm("Apakah Anda yakin akan Menambahkan Produk Reksadana?")){
+      this.addMessage="";
       console.log(this.nama_produk,this.id_jenis_reksadana,this.minimum_pembelian,this.expense_ratio,this.total_aum,this.manager_investasi,this.tingkat_resiko,this.level_resiko
         ,this.bank_kustodian,this.bank_penampung,this.url_vendor,this.password_vendor_md5,this.biaya_pembelian);
         this.level_resiko==1?this.tingkat_resiko="Rendah":this.level_resiko==2?this.tingkat_resiko="Sedang":this.tingkat_resiko="Tinggi";
@@ -204,7 +205,9 @@ export class ProductReksadanaComponent implements OnInit {
             
             console.log('-----> err', err);
           });
-          
+        }else{
+          alert("Membatalkan Transaksi");
+        }
         }
         else{
           this.addMessage=this.validationMessage();
@@ -215,8 +218,10 @@ export class ProductReksadanaComponent implements OnInit {
       
       updateProdukReksadana(ngform:NgForm):void{
         
-        
-        if (ngform.valid  && this.biaya_pembelian>=0 && this.minimum_pembelian>=0 && this.biaya_penjualan>=0 && this.biaya_penjualan>=0 ){
+       
+        if (ngform.valid  && this.biaya_pembelian>=0 && this.total_aum>=0 && this.minimum_pembelian>=0 && this.biaya_penjualan>=0 && this.biaya_penjualan>=0 && this.url_fund_fact!="" && this.url_vendor!=""){
+          if(confirm("Apakah Anda yakin akan Mengubah Produk Reksadana?")){
+          this.addMessage="";
           this.display="hidden";
           this.loader="flex";
           this.formClass='hidden';
@@ -252,7 +257,9 @@ export class ProductReksadanaComponent implements OnInit {
               this.getProdukReksadana();
               console.log('-----> err', err);
             });
-            
+          }else{
+            alert("Membatalkan Transaksi...");
+          }
           }
           else{
             this.addMessage=this.validationMessage();

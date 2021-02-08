@@ -133,6 +133,7 @@ export class PromoakumulasiComponent implements OnInit {
     
     
     if (ngform.valid && (new Date(this.start_date)<new Date(this.end_date))){
+      if(confirm("Apakah Anda yakin akan Menambahkan Promo Akumulasi?")){
       this.display="hidden";
       this.loader="flex";
       this.formClass='hidden';
@@ -161,7 +162,10 @@ export class PromoakumulasiComponent implements OnInit {
         this.getPromoAkumulasi();
         console.log('-----> err', err);
       });
-      
+    }
+    else{
+      alert("Membatalkan Transaksi...");
+    }
     }
     else{
       this.addPromoMessage=this.validationMessage();
@@ -174,6 +178,7 @@ export class PromoakumulasiComponent implements OnInit {
     
     
     if (ngform.valid && (new Date(this.start_date)<new Date(this.end_date))){
+      if(confirm("Apakah Anda yakin akan Mengubah Promo Akumulasi?")){
       this.display="hidden";
       this.loader="flex";
       this.formClass='hidden';
@@ -207,7 +212,9 @@ export class PromoakumulasiComponent implements OnInit {
         this.getPromoAkumulasi();
         console.log('-----> err', err);
       });
-      
+    }else{
+      alert("Membatalkan Transaksi...");
+    }
     }
     else{
       this.addPromoMessage=this.validationMessage();
@@ -291,6 +298,11 @@ export class PromoakumulasiComponent implements OnInit {
     if (this.target_akumulasi==0)
     {
       temp+="Target Akumulasi - ";
+      
+    }
+    if (this.description=="")
+    {
+      temp+="Deskripsi - ";
       
     }
     if(temp!="")

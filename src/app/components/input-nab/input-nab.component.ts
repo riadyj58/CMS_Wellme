@@ -183,9 +183,10 @@ export class InputNABComponent implements OnInit {
   }
   
   updateDailyNab(ngform:NgForm):void{
+
     
-    
-    if (ngform.valid){
+    if (ngform.valid && this.nab>=0){
+      if(confirm("Apakah Anda yakin akan Menambahkan Daily NAB?")){
       this.display="hidden";
       this.loader="flex";
       this.formClass='hidden';
@@ -212,13 +213,16 @@ export class InputNABComponent implements OnInit {
         this.getDailyNab();
         console.log('-----> err', err);
       });
-      
+    }
+    else{
+      alert("Membatalkan Transaksi");
+    }
     }
     else{
       this.submitFormMessage=this.validationMessage();
     }
     
-    
+  
     
   }
 
@@ -229,9 +233,14 @@ export class InputNABComponent implements OnInit {
     var temp="";
     if (this.idProduk==0){
       temp+="id Produk Tidak Boleh Kosong"
-    }    if (this.nab==0)
+    }   
+    if (this.nab==0)
     {
       temp+="- NAB tidak boleh 0"; 
+    }
+    if(this.nab<0)
+    {
+      temp+="Nab Tidak Boleh Minus (-)"
     }
     return temp
   }
