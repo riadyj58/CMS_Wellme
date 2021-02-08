@@ -96,7 +96,7 @@ export class HomeComponent implements OnInit {
       this.newUser=response.output_schema.new_user;
       this.jumlahInvestasi=response.output_schema.jumlah_investasi;
       this.newPlanner=response.output_schema.new_planner;
-      
+      console.log(response);
       response.output_schema.chart_pembelian!=null?response.output_schema.chart_pembelian.forEach((element:any)=> {
         this.xAxis.push(element.date);
         this.yAxisPembelian.push(element.value);
@@ -108,7 +108,7 @@ export class HomeComponent implements OnInit {
       jQuery.xAxis=this.xAxis;
       jQuery.yAxisPembelian=this.yAxisPembelian;
       jQuery.yAxisPenjualan=this.yAxisPenjualan;
-
+      
       (function($){
         var data, options;
         // headline charts
@@ -174,6 +174,7 @@ this.percentage_total_penjualan>=0?this.iconTotalPenjualan="fa fa-caret-up text-
 this.percentage_total_penjualan=Math.round(this.percentage_total_penjualan * 100) / 100
 
 this.total_asset=lastItemPembelian-lastItemPenjualan;
+console.log(this.total_asset)
 this.total_asset_periode_sebelumnya=penjualanPeriodeSebelumnya-transaksiJualPeriodeSebelumnya;
 this.total_asset_periode_sebelumnya==undefined||this.total_asset_periode_sebelumnya==null?this.total_asset_periode_sebelumnya=0:this.total_asset_periode_sebelumnya
 

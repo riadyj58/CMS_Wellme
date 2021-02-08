@@ -73,11 +73,11 @@
 								</div>
 								<div class="col-md-3">
 									<div class="weekly-summary text-right">
-										<span class="number">{{total_penjualan|currency:'Rp ':true:'1.0'}}</span> <span class="percentage"><i  [ngClass]="iconTotalPenjualan"></i> {{percentage_total_penjualan}}%</span>
+										<span class="number">{{total_penjualan|currency:'Rp ':true:'1.0'}}</span> <span class="percentage"><i  [ngClass]="iconTotalPenjualan"></i> {{percentage_total_penjualan |number:'1.0'}}%</span>
 										<span class="info-label">Total Pembelian Nasabah / Periode</span>
 									</div>
 									<div class="weekly-summary text-right">
-										<span class="number">{{total_asset|currency:'Rp ':true:'1.0'}}</span> <span class="percentage"><i  [ngClass]="iconTotalAsset"></i> {{percentage_total_asset}}%</span>
+										<span class="number">{{total_asset|currency:'Rp ':true:'1.0'}}</span> <span class="percentage"><i  [ngClass]="iconTotalAsset"></i> {{percentage_total_asset|number:'1.0'}}%</span>
 										<span class="info-label">Total Aset / Periode</span>
 									</div>
 								</div>
