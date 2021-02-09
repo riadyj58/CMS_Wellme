@@ -147,3 +147,8 @@
 	</div>
 	<!-- END WRAPPER -->
 	<!-- Javascript -->
+<div *ngIf="isLogin=='hidden'">
+	<div style="display: flex; justify-content: center; height: 500px; align-items: center;" [ngClass]="loader" >
+		<div class="loader-overview"></div>
+	</div>
+</div>

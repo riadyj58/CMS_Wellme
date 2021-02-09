@@ -25,7 +25,7 @@ export class HomeComponent implements OnInit {
   user:string="";
   newUser:string="";
   jumlahInvestasi:string="";
-  loader:string="";
+  loader:string="flex";
   newPlanner:string="";
   nowDate = new Date();
   isLogin="hidden";

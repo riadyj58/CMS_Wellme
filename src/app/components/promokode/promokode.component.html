@@ -93,11 +93,8 @@
 </div>
 </div>
 
-
- 
-                        <!--
-                        Tanggal Mulai Promo: <input type="date" class="form-control" style="width: 50%" name="start_Date" [(ngModel)]="start_date" required><br>
-                        Tanggal Selsai Promo: <input type="date" class="form-control" style="width: 50%" name="end_Date" [(ngModel)]="end_date" required><br>
-                        Deskripsi: <textarea cols="10" rows="7" name="description" class="form-control" style="width: 50%; height: 50%;" [(ngModel)]="description"></textarea><br>
-                        Cashback:<input type="number" name="cashback" class="form-control" style="width: 50%" required [(ngModel)]="cashback"/><br>
-                        Minimum Transaksi :<input type="number" name="target_akumulasi" style="width: 50%" class="form-control" required [(ngModel)]="target_akumulasi"/><br> -->
+<div *ngIf="isLogin=='hidden'">
+  <div style="display: flex; justify-content: center; height: 500px; align-items: center;" [ngClass]="loader" >
+    <div class="loader-overview"></div>
+  </div>
+</div>
