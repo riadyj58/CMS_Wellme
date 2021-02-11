@@ -20,8 +20,8 @@ export const environment = {
   historiPenjualanUrl:'http://10.8.0.5:8071/cms/transaction-history/penjualan',
   bobotResikoUrl:'http://10.8.0.5:8071/cms/bobot-resiko',
   dailyNabUrl:'http://10.8.0.5:8071/cms/daily-nab/products',
-  uploadProspektusUrl:'http://10.8.0.5:8098/prospektus/',
-  uploadfundFactUrl:'http://10.8.0.5:8098/fundfact/',
+  uploadProspektusUrl:'http://10.8.0.5:8098/prospektus',
+  uploadfundFactUrl:'http://10.8.0.5:8098/fundfact',
   
 };
 

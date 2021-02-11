@@ -47,6 +47,7 @@
                     Biaya Pembelian:<input type="number" min="0" name="biaya_pembelian" class="form-control" style="width: 50%" required  [(ngModel)]="biaya_pembelian"/><br>
                     Minimum Sisa Unit:<input type="number" min="0" name="minimum_sisa_unit" class="form-control" style="width: 50%" required  [(ngModel)]="minimum_sisa_unit"/><br>
                     Biaya Penjualan :<input type="number" min="0" name="biaya_penjualan" class="form-control" style="width: 50%" required  [(ngModel)]="biaya_penjualan"/><br>
+                    Minimum Penjualan :<input type="number" [min]="0" name="minimal_penjualan" class="form-control" style="width: 50%" required  [(ngModel)]="minimal_penjualan"/><br>
                     Prospektus:<input type="file" class="form-control" (change)="uploadPropektus($event)" style="width: 50%;" placeholder="Upload file" accept="*">
                     URL Prospektus: <input type="text" [disabled]="true" class="form-control" style="width: 50%" name="url_vendor" [(ngModel)]="url_vendor" required><br>
                     Prospektus:<input type="file" class="form-control" (change)="uploadFundFact($event)" style="width: 50%;" placeholder="Upload file" accept="*">
@@ -79,6 +80,7 @@
                         Biaya Pembelian:<input type="number" [min]="0" name="biaya_pembelian" class="form-control" style="width: 50%" required  [(ngModel)]="biaya_pembelian"/><br>
                         Minimum Sisa Unit:<input type="number" [min]="0" name="minimum_sisa_unit" class="form-control" style="width: 50%" required  [(ngModel)]="minimum_sisa_unit"/><br>
                         Biaya Penjualan :<input type="number" [min]="0" name="biaya_penjualan" class="form-control" style="width: 50%" required  [(ngModel)]="biaya_penjualan"/><br>
+                        Minimum Penjualan :<input type="number" [min]="0" name="minimal_penjualan" class="form-control" style="width: 50%" required  [(ngModel)]="minimal_penjualan"/><br>
                         Prospektus:<input type="file" class="form-control" (change)="uploadPropektus($event)" style="width: 50%;" placeholder="Upload file" accept="*">
                         URL Prospektus: <input type="text" [disabled]="true" class="form-control" style="width: 50%" name="url_vendor" [(ngModel)]="url_vendor" required><br>
                         Prospektus:<input type="file" class="form-control" (change)="uploadFundFact($event)" style="width: 50%;" placeholder="Upload file" accept="*">
@@ -143,6 +145,7 @@
                               <td>{{produkReksadana.biaya_pembelian}}</td>
                               <td>{{produkReksadana.minimum_sisa_unit}}</td>
                               <td>{{produkReksadana.biaya_penjualan}}</td>
+                              <td>{{produkReksadana.minimal_penjualan}}</td>
                               <td><button class="btn btn-primary" (click)="onSelect(produkReksadana)">Edit </button>
                             </td>
                           </tr>

@@ -61,6 +61,7 @@ export class ProductReksadanaComponent implements OnInit {
   biaya_pembelian:number=0;
   minimum_sisa_unit:number=0;
   biaya_penjualan:number=0;
+  minimal_penjualan:number=0;
   jenisReksadana:any={};
   role:string="";
   url_fund_fact:string="";
@@ -101,6 +102,7 @@ export class ProductReksadanaComponent implements OnInit {
         {title:'Biaya Pembelian',class:'none'},
         {title:'Minimum Sisa Unit',class:'none'},
         {title:'Biaya Penjualan',class:'none'},
+        {title:'Minimum Penjualan',class:'none'},
         {title:'Edit'},
         
       ]
@@ -167,7 +169,7 @@ export class ProductReksadanaComponent implements OnInit {
   addProdukReksadana(ngform:NgForm):void{
     
     
-    if (ngform.valid  && this.biaya_pembelian>=0 && this.total_aum>=0 && this.minimum_pembelian>=0 && this.biaya_penjualan>=0 && this.biaya_penjualan>=0 && this.url_fund_fact!="" && this.url_vendor!=""){
+    if (ngform.valid  && this.biaya_pembelian>=0 && this.total_aum>=0 && this.minimum_sisa_unit>=0 &&  this.minimum_pembelian>=0 && this.biaya_penjualan>=0 && this.minimal_penjualan>=0 && this.url_fund_fact!="" && this.url_vendor!=""){
       if(confirm("Apakah Anda yakin akan Menambahkan Produk Reksadana?")){
       this.addMessage="";
       console.log(this.nama_produk,this.id_jenis_reksadana,this.minimum_pembelian,this.expense_ratio,this.total_aum,this.manager_investasi,this.tingkat_resiko,this.level_resiko
@@ -180,7 +182,7 @@ export class ProductReksadanaComponent implements OnInit {
         const md5 = new Md5();
         var password:any=md5.appendStr(this.password_vendor_md5).end().toString();
         this.reksadanaService.addProdukReksadana(this.nama_produk,this.id_jenis_reksadana,this.minimum_pembelian,this.expense_ratio,this.total_aum,this.manager_investasi,this.tingkat_resiko,this.level_resiko
-          ,this.bank_kustodian,this.bank_penampung,this.url_vendor,password,this.biaya_pembelian,this.minimum_sisa_unit,this.biaya_penjualan,this.url_fund_fact).subscribe(response=>{
+          ,this.bank_kustodian,this.bank_penampung,this.url_vendor,password,this.biaya_pembelian,this.minimum_sisa_unit,this.biaya_penjualan,this.url_fund_fact,this.minimal_penjualan).subscribe(response=>{
             console.log(response);
             if(response.error_schema.error_code=="BIT-00-000")
             {
@@ -218,8 +220,10 @@ export class ProductReksadanaComponent implements OnInit {
       
       updateProdukReksadana(ngform:NgForm):void{
         
-       
-        if (ngform.valid  && this.biaya_pembelian>=0 && this.total_aum>=0 && this.minimum_pembelian>=0 && this.biaya_penjualan>=0 && this.biaya_penjualan>=0 && this.url_fund_fact!="" && this.url_vendor!=""){
+        
+        if (ngform.valid  && this.biaya_pembelian>=0 && this.total_aum>=0 && this.minimum_sisa_unit>=0 && this.minimum_pembelian>=0 && this.biaya_penjualan>=0 && this.biaya_penjualan>=0 && this.minimal_penjualan>=0 && this.url_fund_fact!="" && this.url_vendor!=""){
+          console.log(this.minimal_penjualan);
+          
           if(confirm("Apakah Anda yakin akan Mengubah Produk Reksadana?")){
           this.addMessage="";
           this.display="hidden";
@@ -230,7 +234,7 @@ export class ProductReksadanaComponent implements OnInit {
           const md5 = new Md5();
           var password:any=md5.appendStr(this.password_vendor_md5).end().toString();
           this.reksadanaService.updateProdukReksadana(this.id_reksadana,this.nama_produk,this.id_jenis_reksadana,this.minimum_pembelian,this.expense_ratio,this.total_aum,this.manager_investasi,this.tingkat_resiko,this.level_resiko
-            ,this.bank_kustodian,this.bank_penampung,this.url_vendor,password,this.biaya_pembelian,this.minimum_sisa_unit,this.biaya_penjualan,this.url_fund_fact).subscribe(response=>{
+            ,this.bank_kustodian,this.bank_penampung,this.url_vendor,password,this.biaya_pembelian,this.minimum_sisa_unit,this.biaya_penjualan,this.url_fund_fact,this.minimal_penjualan).subscribe(response=>{
               console.log(response);
               
               if(response.error_schema.error_code=="BIT-00-000")
@@ -369,24 +373,29 @@ export class ProductReksadanaComponent implements OnInit {
             temp+="Tidak Boleh Kosong "
           }
           
-          if (this.biaya_pembelian<0 ||String(this.biaya_pembelian)=="")
+          if (this.biaya_pembelian<0 ||String(this.biaya_pembelian)==""||this.biaya_pembelian==null)
           {
-            temp+="- Biaya Pembelian - Tidak Boleh Minus ";
+            temp+="- Biaya Pembelian Tidak Boleh Minus atau Kosong";
             
           }
-          if (this.biaya_penjualan<0 ||String(this.biaya_penjualan)=="")
+          if (this.biaya_penjualan<0 ||String(this.biaya_penjualan)=="" ||this.biaya_penjualan==null)
           {
-            temp+="- Biaya Penjualan - Tidak Boleh Minus ";
+            temp+="- Biaya Penjualan Tidak Boleh Minus atau Kosong";
             
           }
-          if (this.minimum_sisa_unit<0 ||String(this.minimum_sisa_unit)=="")
+          if (this.minimum_sisa_unit<0 ||String(this.minimum_sisa_unit)=="" ||this.minimum_sisa_unit==null)
           {
-            temp+="- Minimum Sisa Unit - Tidak Boleh Minus ";
+            temp+="- Minimum Sisa Unit Tidak Boleh Minus atau Kosong";
             
           }
-          if (this.minimum_pembelian<0 ||String(this.minimum_pembelian)=="")
+          if (this.minimum_pembelian<0 ||String(this.minimum_pembelian)=="" ||this.minimum_pembelian==null)
           {
-            temp+="- Minimum Pembelian - Tidak Boleh Minus ";
+            temp+="- Minimum Pembelian Tidak Boleh Minus atau Kosong";
+            
+          }
+          if (this.minimal_penjualan<0 ||String(this.minimal_penjualan)=="" ||this.minimal_penjualan==null)
+          {
+            temp+="- Minimum Penjualan Tidak Boleh Minus atau Kosong";
             
           }
           return temp
@@ -415,6 +424,7 @@ export class ProductReksadanaComponent implements OnInit {
           this.minimum_sisa_unit=selectedItem.minimum_sisa_unit;
           this.biaya_penjualan=selectedItem.biaya_penjualan;
           this.url_fund_fact=selectedItem.url_fund_fact;
+          this.minimal_penjualan=selectedItem.minimal_penjualan;
           window.scroll(0,0);
           
         }
@@ -436,6 +446,8 @@ export class ProductReksadanaComponent implements OnInit {
           this.biaya_pembelian=0;
           this.minimum_sisa_unit=0;
           this.url_fund_fact="";
+          this.biaya_penjualan=0;
+          this.minimal_penjualan=0;
         }
         
         validateDate(produkReksadana:any):boolean{
@@ -464,6 +476,7 @@ export class ProductReksadanaComponent implements OnInit {
         
         
         uploadPropektus(event:any) {
+          this.url_vendor="";
           let fileList: FileList = event.target.files;
           if(fileList.length > 0) {
             let file: File = fileList[0];
@@ -485,12 +498,15 @@ export class ProductReksadanaComponent implements OnInit {
             (response:any)=>{
               this.url_vendor=response.output_schema.file_name
               
+            },(error)=>{
+              this.addMessage="Error Mengupload File Prospektus"
             }
             )
             
           }
         }
         uploadFundFact(event:any) {
+          this.url_fund_fact="";
           let fileList: FileList = event.target.files;
           if(fileList.length > 0) {
             let file: File = fileList[0];
@@ -511,6 +527,8 @@ export class ProductReksadanaComponent implements OnInit {
             this.http.post(environment.uploadfundFactUrl, formData, {headers:headers}).subscribe(
             (response:any)=>{
               this.url_fund_fact=response.output_schema.file_name
+            },(error)=>{
+              this.addMessage="Error Mengupload File Fund Fact";
             }
             )
             

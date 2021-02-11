@@ -55,7 +55,7 @@ export class ProductReksadanaService {
     return this.http.get(url,this.httpOptions);
   }
   addProdukReksadana(nama_produk:string,id_jenis_reksadana:number,minimum_pembelian:number,expense_ratio:number,total_aum:number,manager_investasi:string,tingkat_resiko:string,level_resiko:number
-    ,bank_kustodian:string,bank_penampung:string,url_vendor:string,password_vendor_md5:string,biaya_pembelian:number,minimum_sisa_unit:number,biaya_penjualan:number,url_fund_fact:string):Observable<any>{
+    ,bank_kustodian:string,bank_penampung:string,url_vendor:string,password_vendor_md5:string,biaya_pembelian:number,minimum_sisa_unit:number,biaya_penjualan:number,url_fund_fact:string,minimal_penjualan:number):Observable<any>{
       this.httpOptions=this.sessionService.getHeader();
       const url=environment.produkReksadanaUrl;
       const body={
@@ -74,8 +74,9 @@ export class ProductReksadanaService {
         "biaya_pembelian": Number(biaya_pembelian),
         "minimum_sisa_unit":Number(minimum_sisa_unit),
         "biaya_penjualan":Number(biaya_penjualan),
-        "url_fund_fact":url_fund_fact
-      }
+        "url_fund_fact":url_fund_fact,
+        "minimal_penjualan":Number(minimal_penjualan)
+     };
       
       console.log(body);
       
@@ -83,7 +84,7 @@ export class ProductReksadanaService {
     }
     
     updateProdukReksadana(id_produk:string,nama_produk:string,id_jenis_reksadana:number,minimum_pembelian:number,expense_ratio:number,total_aum:number,manager_investasi:string,tingkat_resiko:string,level_resiko:number
-      ,bank_kustodian:string,bank_penampung:string,url_vendor:string,password_vendor_md5:string,biaya_pembelian:number,minimum_sisa_unit:number,biaya_penjualan:number,url_fund_fact:string):Observable<any>{
+      ,bank_kustodian:string,bank_penampung:string,url_vendor:string,password_vendor_md5:string,biaya_pembelian:number,minimum_sisa_unit:number,biaya_penjualan:number,url_fund_fact:string,minimal_penjualan:number):Observable<any>{
         this.httpOptions=this.sessionService.getHeader();
         const url=environment.produkReksadanaUrl+'/'+id_produk;
         const body={
@@ -103,6 +104,7 @@ export class ProductReksadanaService {
           "minimum_sisa_unit": Number(minimum_sisa_unit),
           "biaya_penjualan": Number(biaya_penjualan),
           "url_fund_fact": url_fund_fact,
+          "minimal_penjualan":Number(minimal_penjualan)
           
         }
         

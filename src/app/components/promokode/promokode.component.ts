@@ -41,7 +41,7 @@ export class PromokodeComponent implements OnInit {
   formUpdateClass:string="hidden";
   role:string="";
   constructor(private fb: FormBuilder, private promoService:PromoService,private router:Router, private session:SessionStorageService, private sessionService:CheckSessionService) {
-  
+    
   }
   
   ngOnInit(): void {
@@ -63,73 +63,73 @@ export class PromokodeComponent implements OnInit {
       {title:'Delete Promo'}
     ]
     ,responsive:true
-    };
-    this.getPromoKode();
-    
-  }
+  };
+  this.getPromoKode();
   
-  getPromoKode():void{
-    
-    this.promoService.getPromoKode().subscribe(response=>{
-      this.promo=response.output_schema;
-      console.log(this.promo);
-      
-      if (this.isDtInitialized) {
-        this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-          dtInstance.destroy();
-          this.dtTrigger.next();
-        });
-      } else {
-        this.isDtInitialized = true
-        this.dtTrigger.next();
-      }
-      
-      this.display="block";
-      this.loader="hidden";
-      
-    }, (err) => {
-      console.log('-----> err', err);
-    });
-  }
-  
-  checkSession():void{
+}
 
-    this.sessionService.checkSession().subscribe(response=> {
-      if(response.output_schema.session.message=="SUKSES"){
-        this.role=response.output_schema.session.role;
-        this.role!="ADMIN"?this.router.navigate(['/']):null;
-        this.isLogin="block";
-        this.session.store("username",response.output_schema.session.username);
-        this.session.store("token",response.output_schema.session.new_token);
+getPromoKode():void{
+  
+  this.promoService.getPromoKode().subscribe(response=>{
+    this.promo=response.output_schema;
+    console.log(this.promo);
+    
+    if (this.isDtInitialized) {
+      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+        dtInstance.destroy();
+        this.dtTrigger.next();
+      });
+    } else {
+      this.isDtInitialized = true
+      this.dtTrigger.next();
+    }
+    
+    this.display="block";
+    this.loader="hidden";
+    
+  }, (err) => {
+    console.log('-----> err', err);
+  });
+}
+
+checkSession():void{
+  
+  this.sessionService.checkSession().subscribe(response=> {
+    if(response.output_schema.session.message=="SUKSES"){
+      this.role=response.output_schema.session.role;
+      this.role!="ADMIN"?this.router.navigate(['/']):null;
+      this.isLogin="block";
+      this.session.store("username",response.output_schema.session.username);
+      this.session.store("token",response.output_schema.session.new_token);
       
-      }
-      else{
-        this.router.navigate(['/login'])
-      }
-    }, (error) => {
-  
+    }
+    else{
       this.router.navigate(['/login'])
-    });
-  }
-  
-  
-  toggleAdd():void{
-    this.formClass='block';
-    this.formUpdateClass="hidden";
-    this.resetForm();
-    window.scroll(0,0);
-  }
-  
-  addPromoKode(ngform:NgForm):void{
+    }
+  }, (error) => {
     
-    
-    if (ngform.valid && (new Date(this.start_date)<new Date(this.end_date))){
-      if(confirm("Apakah Anda yakin akan Menambahkan Promo Transaksi?")){
+    this.router.navigate(['/login'])
+  });
+}
+
+
+toggleAdd():void{
+  this.formClass='block';
+  this.formUpdateClass="hidden";
+  this.resetForm();
+  window.scroll(0,0);
+}
+
+addPromoKode(ngform:NgForm):void{
+  
+
+  if (ngform.valid && this.kodePromoValid() && (new Date(this.start_date)<new Date(this.end_date))){
+    if(confirm("Apakah Anda yakin akan Menambahkan Promo Transaksi?")){
       this.display="hidden";
       this.loader="flex";
       this.formClass='hidden';
       
-      this.promoService.addPromoKode(this.kodePromo,this.title,this.subtitle,this.start_date,this.end_date,this.description,this.cashback,this.minimum_transaksi).subscribe(response=>{
+      this.promoService.addPromoKode(this.kodePromo.toUpperCase(),this.title,this.subtitle,this.start_date,this.end_date,this.description,this.cashback,this.minimum_transaksi).subscribe(response=>{
         console.log(response);
         if(response.error_schema.error_code=="BIT-00-000")
         {
@@ -156,28 +156,28 @@ export class PromokodeComponent implements OnInit {
     }else{
       alert("Membatalkan Transaksi...");
     }
-    }
-    else{
-      this.addPromoMessage=this.validationMessage();
-    }
-    
-    
+  }
+  else{
+    this.addPromoMessage=this.validationMessage();
   }
   
-  updatePromoKode(ngform:NgForm):void{
-    
-    
-    if (ngform.valid && (new Date(this.start_date)<new Date(this.end_date))){
-      if(confirm("Apakah Anda yakin akan Mengubah Promo Transaksi?")){
+  
+}
+
+updatePromoKode(ngform:NgForm):void{
+  
+  
+  if (ngform.valid && this.kodePromoValid() && (new Date(this.start_date)<new Date(this.end_date))){
+    if(confirm("Apakah Anda yakin akan Mengubah Promo Transaksi?")){
       this.display="hidden";
       this.loader="flex";
       this.formClass='hidden';
       this.formUpdateClass="hidden";
       var c=this.cashback;
       var t=this.minimum_transaksi;
-      this.promoService.updatePromoKode(this.kodePromo,this.title,this.subtitle,this.start_date,this.end_date,this.description,c,t).subscribe(response=>{
+      this.promoService.updatePromoKode(this.kodePromo.toUpperCase(),this.title,this.subtitle,this.start_date,this.end_date,this.description,c,t).subscribe(response=>{
         console.log(response);
-       
+        
         if(response.error_schema.error_code=="BIT-00-000")
         {
           this.alertMessage="Berhasil Mengupdate ";
@@ -205,164 +205,181 @@ export class PromokodeComponent implements OnInit {
     }else{
       alert("Membatalkan Transaksi...");
     }
-    }
-    else{
-      this.addPromoMessage=this.validationMessage();
-    }
-    
-    
   }
-  isActive(active:string):boolean{
-    if(active=="1")
-    {
-      return true;
-    }
-    else{
-      return false;
-    }
-
+  else{
+    this.addPromoMessage=this.validationMessage();
   }
-  deactivatePromo(kodePromo:string):void{
-
-    if(confirm("Apakah Anda yakin akan menonaktifkan promo?"))
-    {
-      this.display="hidden";
-      this.loader="flex";
-      this.formClass='hidden';
-      
-      this.promoService.deactivatePromo(kodePromo).subscribe(response=>{
-        console.log(response);
-        if(response.error_schema.error_code=="BIT-00-000")
-        {
-          this.alertMessage="Berhasil Menonaktifkan";
-          this.alert="block alert-success";
-          this.getPromoKode();
-        }
-        else{
-          this.alertMessage="Gagal Menonaktifkan";
-          this.alert="block alert-danger";
-          this.getPromoKode();
-        }
-        this.resetForm();
-        
-      },(err) => {
-        this.resetForm();
+  
+  
+}
+isActive(active:string):boolean{
+  if(active=="1")
+  {
+    return true;
+  }
+  else{
+    return false;
+  }
+  
+}
+deactivatePromo(kodePromo:string):void{
+  
+  if(confirm("Apakah Anda yakin akan menonaktifkan promo?"))
+  {
+    this.display="hidden";
+    this.loader="flex";
+    this.formClass='hidden';
+    
+    this.promoService.deactivatePromo(kodePromo).subscribe(response=>{
+      console.log(response);
+      if(response.error_schema.error_code=="BIT-00-000")
+      {
+        this.alertMessage="Berhasil Menonaktifkan";
+        this.alert="block alert-success";
+        this.getPromoKode();
+      }
+      else{
         this.alertMessage="Gagal Menonaktifkan";
         this.alert="block alert-danger";
         this.getPromoKode();
-        console.log('-----> err', err);
-      });
-    }
-    else {
-      alert("Membatalkan Transaksi..");
-    }
-     
-    
-  }
-
-  validationMessage():string
-  {
-    
-    var temp="";
-    if (this.kodePromo==""){
-      temp+="Kode Promo -"
-    }
-    if (this.title=="")
-    {
-      temp+="Judul - ";
-    }
-    
-    if (this.subtitle=="")
-    {
-      temp+="Subtitle - ";
-    }
-    if (this.start_date=="")
-    {
-      temp+="Tanggal Mulai Promo - ";
-    }
-    if (this.end_date=="")
-    {
-      temp+="Tanggal Akhir Promo - ";
-    }
-    if (this.cashback==0)
-    {
-      temp+="Cashback - ";
-    }
-    if (this.description=="")
-    {
-      temp+="Deskripsi - ";
+      }
+      this.resetForm();
       
-    }
-    if (this.minimum_transaksi==0)
-    {
-      temp+="Target kode - ";
-      
-    }
-    if(temp!="")
-    {
-      temp+="Tidak Boleh Kosong"
-    }
-    
-    if (new Date(this.start_date)>new Date(this.end_date))
-    {
-      temp+="- Tanggal Mulai Tidak Bisa Lebih Besar dari tanggal Selesai"; 
-    }
-    if (this.kodePromo.length>10)
-    {
-      temp+="- Panjang Kode Promo Tidak boleh lebih dari 10"; 
-    }
-    return temp
+    },(err) => {
+      this.resetForm();
+      this.alertMessage="Gagal Menonaktifkan";
+      this.alert="block alert-danger";
+      this.getPromoKode();
+      console.log('-----> err', err);
+    });
   }
-
-  onSelect(selectedItem: any) {
-    console.log("Selected item : ", selectedItem);
-    var parts=selectedItem.start_date.split('-');
-    var parts2=selectedItem.end_date.split('-');
-    var sf = new Date(parts[2], parts[1] - 1, parts[0]); 
-    var ef= new Date(parts2[2], parts2[1] - 1, parts2[0]); 
-    console.log(sf,ef);
-    var start_date_formatted = new DatePipe('en-US').transform(sf, 'yyyy-MM-dd');
-    var end_date_formatted = new DatePipe('en-US').transform(ef, 'yyyy-MM-dd');
-
-    this.resetForm();
-    this.formUpdateClass="block";
-    this.formClass="hidden";
-    this.kodePromo=selectedItem.kode_promo;
-    this.title=selectedItem.title;
-    this.subtitle=selectedItem.subtitle;
-    this.start_date= start_date_formatted==null?"":start_date_formatted;
-    this.end_date=end_date_formatted==null?"":end_date_formatted;
-    this.description=selectedItem.description;
-    this.minimum_transaksi=selectedItem.minimum_transaction;
-    this.cashback=Number(selectedItem.cashback);
-    this.minimum_transaksi=Number(selectedItem.minimum_transaction);
-    window.scroll(0,0);
-    
+  else {
+    alert("Membatalkan Transaksi..");
   }
   
-  resetForm():void
+  
+}
+
+validationMessage():string
+{
+  
+  var temp="";
+  if (this.kodePromo==""){
+    temp+="Kode Promo -"
+  }
+  if (this.title=="")
   {
-    this.kodePromo="";
-    this.title="";
-    this.subtitle="";
-    this.start_date="";
-    this.end_date="";
-    this.description="";
-    this.cashback=0;
-    this.minimum_transaksi=0;
+    temp+="Judul - ";
   }
-
-  validateDate(promo:any):boolean{
-    var parts=promo.start_date.split('-');
-    var sf = new Date(parts[2], parts[1] - 1, parts[0]); 
-    if(sf<new Date())
-    {
-      return false;
-    }
-    else{
-
-      return true;
-    }
+  
+  if (this.subtitle=="")
+  {
+    temp+="Subtitle - ";
   }
+  if (this.start_date=="")
+  {
+    temp+="Tanggal Mulai Promo - ";
+  }
+  if (this.end_date=="")
+  {
+    temp+="Tanggal Akhir Promo - ";
+  }
+  if (this.cashback==0)
+  {
+    temp+="Cashback - ";
+  }
+  if (this.description=="")
+  {
+    temp+="Deskripsi - ";
+    
+  }
+  if (this.minimum_transaksi==0)
+  {
+    temp+="Target kode - ";
+    
+  }
+  if(temp!="")
+  {
+    temp+="Tidak Boleh Kosong"
+  }
+  
+  if (new Date(this.start_date)>new Date(this.end_date))
+  {
+    temp+="- Tanggal Mulai Tidak Bisa Lebih Besar dari tanggal Selesai"; 
+  }
+  if (this.kodePromo.length>10)
+  {
+    temp+="- Panjang Kode Promo Tidak boleh lebih dari 10"; 
+  }
+  if (this.kodePromoValid()==false)
+  {
+    temp+="- Kode Promo Hanya Boleh Berisi Huruf dan Angka"; 
+  }
+  
+  return temp
+}
+
+onSelect(selectedItem: any) {
+  console.log("Selected item : ", selectedItem);
+  var parts=selectedItem.start_date.split('-');
+  var parts2=selectedItem.end_date.split('-');
+  var sf = new Date(parts[2], parts[1] - 1, parts[0]); 
+  var ef= new Date(parts2[2], parts2[1] - 1, parts2[0]); 
+  console.log(sf,ef);
+  var start_date_formatted = new DatePipe('en-US').transform(sf, 'yyyy-MM-dd');
+  var end_date_formatted = new DatePipe('en-US').transform(ef, 'yyyy-MM-dd');
+  
+  this.resetForm();
+  this.formUpdateClass="block";
+  this.formClass="hidden";
+  this.kodePromo=selectedItem.kode_promo;
+  this.title=selectedItem.title;
+  this.subtitle=selectedItem.subtitle;
+  this.start_date= start_date_formatted==null?"":start_date_formatted;
+  this.end_date=end_date_formatted==null?"":end_date_formatted;
+  this.description=selectedItem.description;
+  this.minimum_transaksi=selectedItem.minimum_transaction;
+  this.cashback=Number(selectedItem.cashback);
+  this.minimum_transaksi=Number(selectedItem.minimum_transaction);
+  window.scroll(0,0);
+  
+}
+
+resetForm():void
+{
+  this.kodePromo="";
+  this.title="";
+  this.subtitle="";
+  this.start_date="";
+  this.end_date="";
+  this.description="";
+  this.cashback=0;
+  this.minimum_transaksi=0;
+}
+
+validateDate(promo:any):boolean{
+  var parts=promo.start_date.split('-');
+  var sf = new Date(parts[2], parts[1] - 1, parts[0]); 
+  if(sf<new Date())
+  {
+    return false;
+  }
+  else{
+    
+    return true;
+  }
+}
+
+
+kodePromoValid():boolean{
+  if(this.kodePromo.match("^[A-Za-z0-9]+$")==null)
+  {
+    return false;
+    
+  }
+  else{
+    return true;
+  }
+}
 
 }
