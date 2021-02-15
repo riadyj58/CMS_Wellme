@@ -193,7 +193,7 @@ export class ProductReksadanaComponent implements OnInit {
               this.getProdukReksadana();
             }
             else{
-              this.alertMessage="Gagal Menambahkan";
+              this.alertMessage="[ERROR: "+response.error_schema.error_code+"] Gagal Menambahkan";
               this.alert="block alert-danger";
               this.getProdukReksadana();
             }
@@ -201,7 +201,7 @@ export class ProductReksadanaComponent implements OnInit {
             
           },(err) => {
             this.resetForm();
-            this.alertMessage="Gagal Menambahkan";
+            this.alertMessage="[ERROR: "+err.error.error_schema.error_code+"] Gagal Menambahkan";
             this.alert="block alert-danger";
             this.getProdukReksadana();
             
@@ -246,7 +246,7 @@ export class ProductReksadanaComponent implements OnInit {
                 this.getProdukReksadana();
               }
               else{
-                this.alertMessage="Gagal Mengupdate";
+                this.alertMessage="[ERROR: "+response.error_schema.error_code+"] Gagal Mengubah";
                 this.alert="block alert-danger";
                 this.getProdukReksadana();
               }
@@ -254,7 +254,7 @@ export class ProductReksadanaComponent implements OnInit {
               
             },(err) => {
               this.resetForm();
-              this.alertMessage="Gagal Mengupdate";
+              this.alertMessage="[ERROR: "+err.error.error_schema.error_code+"] Gagal Mengubah";
               this.alert="block alert-danger";
               this.formClass="hidden";
               this.formUpdateClass="hidden";
@@ -301,7 +301,7 @@ export class ProductReksadanaComponent implements OnInit {
                 this.getProdukReksadana();
               }
               else{
-                this.alertMessage="Gagal Menonaktifkan";
+                this.alertMessage="[ERROR: "+response.error_schema.error_code+"] Gagal Menonaktifkan";
                 this.alert="block alert-danger";
                 this.getProdukReksadana();
               }
@@ -309,7 +309,7 @@ export class ProductReksadanaComponent implements OnInit {
               
             },(err) => {
               this.resetForm();
-              this.alertMessage="Gagal Menonaktifkan";
+              this.alertMessage="[ERROR: "+err.error.error_schema.error_code+"] Gagal Menonaktifkan";
               this.alert="block alert-danger";
               this.getProdukReksadana();
               console.log('-----> err', err);

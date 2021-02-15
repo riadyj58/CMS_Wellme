@@ -140,7 +140,7 @@ addPromoKode(ngform:NgForm):void{
           this.getPromoKode();
         }
         else{
-          this.alertMessage="Gagal Menambahkan";
+          this.alertMessage="[ERROR: "+response.error_schema.error_code+"] Gagal Menambahkan";
           this.alert="block alert-danger";
           this.getPromoKode();
         }
@@ -148,7 +148,7 @@ addPromoKode(ngform:NgForm):void{
         
       },(err) => {
         this.resetForm();
-        this.alertMessage="Gagal Menambahkan";
+        this.alertMessage="[ERROR: "+err.error.error_schema.error_code+"] Gagal Menambahkan";
         this.alert="block alert-danger";
         this.getPromoKode();
         console.log('-----> err', err);
@@ -187,7 +187,7 @@ updatePromoKode(ngform:NgForm):void{
           this.getPromoKode();
         }
         else{
-          this.alertMessage="Gagal Mengupdate";
+          this.alertMessage="[ERROR: "+response.error.error_schema.error_code+"] Gagal Mengubah";
           this.alert="block alert-danger";
           this.getPromoKode();
         }
@@ -195,7 +195,7 @@ updatePromoKode(ngform:NgForm):void{
         
       },(err) => {
         this.resetForm();
-        this.alertMessage="Gagal Mengupdate";
+        this.alertMessage="[ERROR: "+err.error.error_schema.error_code+"] Gagal Mengubah";
         this.alert="block alert-danger";
         this.formClass="hidden";
         this.formUpdateClass="hidden";
@@ -239,7 +239,7 @@ deactivatePromo(kodePromo:string):void{
         this.getPromoKode();
       }
       else{
-        this.alertMessage="Gagal Menonaktifkan";
+        this.alertMessage="[ERROR: "+response.error_schema.error_code+"] Gagal Menonaktifkan";
         this.alert="block alert-danger";
         this.getPromoKode();
       }
@@ -247,7 +247,7 @@ deactivatePromo(kodePromo:string):void{
       
     },(err) => {
       this.resetForm();
-      this.alertMessage="Gagal Menonaktifkan";
+      this.alertMessage="[ERROR: "+err.error.error_schema.error_code+"] Gagal Menonaktifkan";
       this.alert="block alert-danger";
       this.getPromoKode();
       console.log('-----> err', err);

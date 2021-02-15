@@ -138,14 +138,14 @@ columnTableBobotResiko :any=[];
           this.getBobotResiko();
         }
         else{
-          this.alertMessage="Gagal Mengubah";
+          this.alertMessage="[ERROR: "+response.error_schema.error_code+"] Gagal Mengubah";
           this.alert="block alert-danger";
           this.getBobotResiko();
         }
         this.resetForm();
       },(err:any) => {
         this.resetForm();
-        this.alertMessage="Gagal Mengubah";
+        this.alertMessage="[ERROR: "+err.error.error_schema.error_code+"] Gagal Mengubah";
         this.alert="block alert-danger";
         this.formClass="hidden";
         this.formUpdateClass="hidden";

@@ -158,7 +158,7 @@ export class InputNABComponent implements OnInit {
           this.getJenisReksadana();
         }
         else{
-          this.alertMessage="Gagal Menambahkan";
+          this.alertMessage="[ERROR: "+response.error_schema.error_code+"] Gagal Menambahakan";
           this.alert="block alert-danger";
           this.getJenisReksadana();
         }
@@ -166,7 +166,7 @@ export class InputNABComponent implements OnInit {
         
       },(err:any) => {
         this.resetForm();
-        this.alertMessage="Gagal Menambahkan";
+        this.alertMessage="[ERROR: "+err.error.error_schema.error_code+"] Gagal Menambahkan";
         this.alert="block alert-danger";
         this.formClass="hidden";
         this.formUpdateClass="hidden";
@@ -199,14 +199,14 @@ export class InputNABComponent implements OnInit {
           this.getDailyNab();
         }
         else{
-          this.alertMessage="Gagal Mengubah";
+          this.alertMessage="[ERROR: "+response.error_schema.error_code+"] Gagal Mengubah";
           this.alert="block alert-danger";
           this.getDailyNab();
         }
         this.resetForm();
       },(err:any) => {
         this.resetForm();
-        this.alertMessage="Gagal Mengubah";
+        this.alertMessage="[ERROR: "+err.error.error_schema.error_code+"] Gagal Mengubah";
         this.alert="block alert-danger";
         this.formClass="hidden";
         this.formUpdateClass="hidden";
