@@ -82,8 +82,8 @@
                               <td>{{promo.start_date}}</td>
                               <td>{{promo.end_date}}</td>
                               <td>{{promo.description}}</td>
-                              <td>{{promo.cashback}}</td>
-                              <td>{{promo.target_akumulasi}}</td>
+                              <td>{{promo.cashback | currency : 'Rp ' | IDR}}</td>
+                              <td>{{promo.target_akumulasi | currency : 'Rp ' | IDR}}</td>
                               <td><div *ngIf="isActive(promo.active_status)">Aktif</div>
                                 <div *ngIf="!isActive(promo.active_status)">Non Aktif</div>
                             </td>

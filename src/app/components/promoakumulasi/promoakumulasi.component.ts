@@ -65,7 +65,7 @@ export class PromoakumulasiComponent implements OnInit {
         {title:'Target Akumulasi'},
         {title:'Aktif Status'},
         {title:'Edit Promo'},
-        {title:'Delete Promo'}
+        {title:'Non Aktifkan'}
 
       ]
     ,responsive:true

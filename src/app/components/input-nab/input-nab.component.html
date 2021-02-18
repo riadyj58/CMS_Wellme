@@ -60,7 +60,7 @@
                           <tr  *ngFor='let dailyNab of dailyNab'>
                               <td>{{dailyNab.id_produk}}</td>
                               <td>{{dailyNab.nama_produk}}</td>
-                              <td>{{dailyNab.latest_nab}}</td>
+                              <td>{{dailyNab.latest_nab| currency : 'Rp ' | IDR}}</td>
                               <td *ngIf="dailyNab.is_updated_today==0"><button class="btn btn-primary" (click)="onSelect(dailyNab)">Add Daily NAB </button>
                               <td *ngIf="dailyNab.is_updated_today!=0"><button class="btn btn-primary" disabled>Add Daily NAB </button>
                                 

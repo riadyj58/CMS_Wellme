@@ -23,6 +23,8 @@ import { InputNABComponent } from './components/input-nab/input-nab.component';
 import { BobotResikoComponent } from './components/bobot-resiko/bobot-resiko.component';
 import { RouterModule } from '@angular/router';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+
+import { ReplacePipe } from './Pipe/replace.pipe'
 @NgModule({
 
   declarations: [
@@ -40,7 +42,8 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     HistoriPenjualanNasabahComponent,
     HistoriPembelianNasabahComponent,
     InputNABComponent,
-    BobotResikoComponent
+    BobotResikoComponent,
+    ReplacePipe
   ],
   imports: [
     BrowserModule,
@@ -50,7 +53,7 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     DataTablesModule,
     NgxWebstorageModule.forRoot(),
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
   ],
   providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]

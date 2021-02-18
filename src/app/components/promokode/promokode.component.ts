@@ -7,7 +7,6 @@ import { SessionStorageService } from 'ngx-webstorage';
 import { Subject } from 'rxjs';
 import { CheckSessionService } from 'src/app/services/check-session.service';
 import { PromoService } from 'src/app/services/promo.service';
-
 @Component({
   selector: 'app-promokode',
   templateUrl: './promokode.component.html',
@@ -60,7 +59,7 @@ export class PromokodeComponent implements OnInit {
       {title:'Minimum Transaksi'},
       {title:'Aktif Status'},
       {title:'Edit Promo'},
-      {title:'Delete Promo'}
+      {title:'Non Aktifkan'}
     ]
     ,responsive:true
   };

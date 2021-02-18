@@ -125,10 +125,10 @@
                           <tr  *ngFor='let produkReksadana of produkReksadana'>
                               <td>{{produkReksadana.id_reksadana}}</td>
                               <td>{{produkReksadana.nama_reksadana}}</td>
-                              <td>{{produkReksadana.nab}}</td>
-                              <td>{{produkReksadana.minimum_pembelian}}</td>
+                              <td>{{produkReksadana.nab | currency : 'Rp ' | IDR}}</td>
+                              <td>{{produkReksadana.minimum_pembelian| currency : 'Rp ' | IDR}}</td>
                               <td>{{produkReksadana.expense_ratio}}</td>
-                              <td>{{produkReksadana.total_aum}}</td>
+                              <td>{{produkReksadana.total_aum }}</td>
                               <td>{{produkReksadana.manager_investasi}}</td>
                               <td>{{produkReksadana.resiko}}</td>
                               <td>{{produkReksadana.level_resiko}}</td>

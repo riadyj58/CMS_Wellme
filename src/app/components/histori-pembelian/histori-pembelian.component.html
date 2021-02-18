@@ -39,9 +39,9 @@
                               <td>{{historiPembelian.nama_plan}}</td>
                               <td>{{historiPembelian.status_transaksi}}</td>
                               <td>{{historiPembelian.kode_promo}}</td>
-                              <td>{{historiPembelian.nab==-1?"N/A":historiPembelian.nab}}</td>
+                              <td>{{historiPembelian.nab==-1?"N/A":historiPembelian.nab| currency : 'Rp ' | IDR}}</td>
                               <td>{{historiPembelian.jumlah_unit==-1?"N/A":historiPembelian.jumlah_unit}}</td>
-                              <td>{{historiPembelian.total_nominal}}</td>
+                              <td>{{historiPembelian.total_nominal| currency : 'Rp ' | IDR}}</td>
                               <td>{{historiPembelian.tanggal_transaksi}}</td>
                               <td>{{historiPembelian.tanggal_verifikasi_bank}}</td>
                               <td>{{historiPembelian.tanggal_verifikasi_penjualan}}</td>

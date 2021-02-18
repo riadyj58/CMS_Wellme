@@ -35,9 +35,9 @@
                               <td>{{historiPenjualan.id_plan}}</td>
                               <td>{{historiPenjualan.nama_plan}}</td>
                               <td>{{historiPenjualan.status_transaksi}}</td>
-                              <td>{{historiPenjualan.nab==-1?"N/A":historiPenjualan.nab}}</td>
+                              <td>{{historiPenjualan.nab==-1?"N/A":historiPenjualan.nab| currency : 'Rp ' | IDR}}</td>
                               <td>{{historiPenjualan.jumlah_unit}}</td>
-                              <td>{{historiPenjualan.total_nominal==-1?"N/A":historiPenjualan.total_nominal}}</td>
+                              <td>{{historiPenjualan.total_nominal==-1?"N/A":historiPenjualan.total_nominal| currency : 'Rp ' | IDR}}</td>
                               <td>{{historiPenjualan.tanggal_transaksi}}</td>
                               <td>{{historiPenjualan.tanggal_verifikasi_bank}}</td>
                               <td>{{historiPenjualan.tanggal_verifikasi_penjualan}}</td>
