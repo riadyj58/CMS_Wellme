@@ -53,6 +53,7 @@ export class PromoakumulasiComponent implements OnInit {
       pagingType: 'full_numbers',
       pageLength: 10,
       processing: true,
+      order:[[8,'desc']],
       columns:[
   
         {title:'ID Promo'},

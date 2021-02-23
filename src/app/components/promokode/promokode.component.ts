@@ -49,6 +49,7 @@ export class PromokodeComponent implements OnInit {
       pagingType: 'full_numbers',
       pageLength: 10,
       processing: true,
+      order:[[8,'desc']],
       columns:[ {title:'ID Promo'},
       {title:'Judul'},
       {title:'Subtitle',class:'none'},
